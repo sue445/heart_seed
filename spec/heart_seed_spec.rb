@@ -1,12 +1,11 @@
-require "yaml"
-
 describe HeartSeed do
-  describe "#xls_to_yml" do
-    subject{ HeartSeed.xls_to_yml(source_file: source_file, source_sheet: source_sheet, dist_file: dist_file) }
+  describe "#convert_to_yml" do
+    subject{ HeartSeed.convert_to_yml(source_file: source_file, source_sheet: source_sheet, dist_file: dist_file) }
 
     where(:format) do
       [
           ["xls"],
+          ["xlsx"],
       ]
     end
 

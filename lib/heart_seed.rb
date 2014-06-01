@@ -1,11 +1,12 @@
 require "heart_seed/version"
 require "roo"
 require "active_support/all"
+require "yaml"
 
 module HeartSeed
   HEADER_ROW = 1
 
-  # convert xls to yaml and write to file.
+  # convert xls,xlsx to yaml and write to file.
   #
   # ## example
   # ### source xls
@@ -28,15 +29,23 @@ module HeartSeed
   #   created_at: '2014-06-02 12:10:00 +0900'
   # ```
   #
-  # @param source_file  [String] source xls file
+  # @param source_file  [String] source file (xls, xlsx)
   # @param source_sheet [String]
   # @param dist_file    [String] don't write to file if blank
   # @return [Array<Hash>]
-  def self.xls_to_yml(source_file: nil, source_sheet: nil, dist_file: nil)
-    xls = Roo::Excel.new(source_file)
-    sheet = xls.sheet(source_sheet)
-    header_keys = sheet.row(HEADER_ROW)
+  def self.convert_to_yml(source_file: nil, source_sheet: nil, dist_file: nil)
+    case File.extname(source_file)
+    when ".xls"
+      xls = Roo::Excel.new(source_file)
+      sheet = xls.sheet(source_sheet)
+    when ".xlsx"
+      xlsx = Roo::Excelx.new(source_file)
+      sheet = xlsx.sheet(source_sheet)
+    else
+      raise ArgumentError, "unknown format: #{source_file}"
+    end
 
+    header_keys = sheet.row(HEADER_ROW)
     response = []
 
     (HEADER_ROW + 1 .. sheet.last_row).each do |row_num|
