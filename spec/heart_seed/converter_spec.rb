@@ -20,19 +20,21 @@ describe HeartSeed::Converter do
         subject
         expect(File.read(dist_file)).to eq <<YAML
 ---
-- id: 1
+articles_1:
+  id: 1
   title: title1
   description: description1
   created_at: '2014-06-01 12:10:00 +0900'
-- id: 2
+articles_2:
+  id: 2
   title: title2
   description: description2
   created_at: '2014-06-02 12:10:00 +0900'
 YAML
       end
 
-      its([0]){ should == {"id" => 1, "title" => "title1", "description" => "description1", "created_at" => "2014-06-01 12:10:00 +0900"} }
-      its([1]){ should == {"id" => 2, "title" => "title2", "description" => "description2", "created_at" => "2014-06-02 12:10:00 +0900"} }
+      its(["articles_1"]){ should == {"id" => 1, "title" => "title1", "description" => "description1", "created_at" => "2014-06-01 12:10:00 +0900"} }
+      its(["articles_2"]){ should == {"id" => 2, "title" => "title2", "description" => "description2", "created_at" => "2014-06-02 12:10:00 +0900"} }
     end
 
   end

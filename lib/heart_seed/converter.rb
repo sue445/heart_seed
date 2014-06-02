@@ -15,11 +15,13 @@ module HeartSeed
     # ### output yaml
     # ```yaml
     # ---
-    # - id: 1
+    # articles_1:
+    #   id: 1
     #   title: title1
     #   description: description1
     #   created_at: '2014-06-01 12:10:00 +0900'
-    # - id: 2
+    # articles_2:
+    #   id: 2
     #   title: title2
     #   description: description2
     #   created_at: '2014-06-02 12:10:00 +0900'
@@ -41,21 +43,21 @@ module HeartSeed
             raise ArgumentError, "unknown format: #{source_file}"
           end
 
-      row_hashes = read_sheet(sheet)
+      fixtures = read_sheet(sheet, source_sheet)
 
       unless dist_file.blank?
         File.open(dist_file, "w") do |f|
-          f.write(YAML.dump(row_hashes))
+          f.write(YAML.dump(fixtures))
         end
       end
 
-      row_hashes
+      fixtures
     end
 
     private
-    def self.read_sheet(sheet)
+    def self.read_sheet(sheet, name)
       header_keys = sheet.row(HEADER_ROW)
-      row_hashes = []
+      fixtures = {}
 
       (HEADER_ROW + 1 .. sheet.last_row).each do |row_num|
         row_value = {}
@@ -75,10 +77,13 @@ module HeartSeed
           row_value[key] = value
         end
 
-        row_hashes << row_value
+        suffix = row_value.has_key?("id") ? row_value["id"] : row_num - 1
+        row_name = "#{name}_#{suffix}"
+
+        fixtures[row_name] = row_value
       end
 
-      row_hashes
+      fixtures
     end
   end
 end
