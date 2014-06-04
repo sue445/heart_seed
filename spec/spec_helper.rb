@@ -27,6 +27,9 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 DATA_DIR    = "#{File.dirname(__FILE__)}/data"
 FIXTURE_DIR = "#{File.dirname(__FILE__)}/fixtures"
 
+require_relative "./db/migration"
+require 'database_rewinder'
+
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
@@ -94,7 +97,20 @@ RSpec.configure do |config|
   end
 =end
 
+  config.order = :random
+
   config.before(:each) do
     Time.zone = "Tokyo"
+  end
+
+  # database_rewinder
+  config.before :suite do
+    DatabaseRewinder.clean_all
+    # or
+    # DatabaseRewinder.clean_with :any_arg_that_would_be_actually_ignored_anyway
+  end
+
+  config.after :each do
+    DatabaseRewinder.clean
   end
 end
