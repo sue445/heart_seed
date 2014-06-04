@@ -24,7 +24,8 @@ require 'rspec-parameterized'
 # in spec/support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
-DATA_DIR = "#{File.dirname(__FILE__)}/data"
+DATA_DIR    = "#{File.dirname(__FILE__)}/data"
+FIXTURE_DIR = "#{File.dirname(__FILE__)}/fixtures"
 
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience

@@ -38,4 +38,14 @@ YAML
     end
 
   end
+
+  describe "#read_fixture_yml" do
+    subject{ HeartSeed::Converter.read_fixture_yml(source_file) }
+
+    let(:source_file){ "#{FIXTURE_DIR}/articles.yml" }
+
+    its(:count){ should == 2 }
+    its([0]){ should == {"id" => 1, "title" => "title1", "description" => "description1", "created_at" => "2014-06-01 12:10:00 +0900"} }
+    its([1]){ should == {"id" => 2, "title" => "title2", "description" => "description2", "created_at" => "2014-06-02 12:10:00 +0900"} }
+  end
 end

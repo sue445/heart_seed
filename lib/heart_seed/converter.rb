@@ -54,6 +54,17 @@ module HeartSeed
       fixtures
     end
 
+
+    # @param source_file  [String] source yml file
+    #
+    # @return [Array<Hash>] rows
+    def self.read_fixture_yml(source_file)
+      YAML.load_file(source_file).each_with_object([]) do |(name, value), array|
+        array << value
+        array
+      end
+    end
+
     private
     def self.read_sheet(sheet, name)
       header_keys = sheet.row(HEADER_ROW)
