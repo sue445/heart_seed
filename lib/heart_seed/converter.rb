@@ -31,18 +31,9 @@ module HeartSeed
     # @param source_sheet [String]
     # @param dist_file    [String] don't write to file if blank
     #
-    # @return [Array<Hash>]
+    # @return [ Hash{ String => Hash{ String => Object } } ]
     def self.convert_to_yml(source_file: nil, source_sheet: nil, dist_file: nil)
-      sheet =
-          case File.extname(source_file)
-          when ".xls"
-            Roo::Excel.new(source_file).sheet(source_sheet)
-          when ".xlsx"
-            Roo::Excelx.new(source_file).sheet(source_sheet)
-          else
-            raise ArgumentError, "unknown format: #{source_file}"
-          end
-
+      sheet = open_file(source_file).sheet(source_sheet)
       fixtures = read_sheet(sheet, source_sheet)
 
       unless dist_file.blank?
@@ -54,19 +45,42 @@ module HeartSeed
       fixtures
     end
 
-
     # @param source_file  [String] source yml file
     #
     # @return [Array<Hash>] rows
     def self.read_fixture_yml(source_file)
-      YAML.load_file(source_file).each_with_object([]) do |(name, value), array|
-        array << value
-        array
-      end
+      YAML.load_file(source_file).values
+    end
+
+    # @param source_file
+    #
+    # @return [Array<String>] sheet names (rejected multi-byte sheet)
+    def self.table_sheets(source_file)
+      # reject multi-byte sheet
+      open_file(source_file).sheets.select{|sheet| sheet =~ /^[A-Za-z0-9_]+$/ }
     end
 
     private
-    def self.read_sheet(sheet, name)
+
+    # @param source_file [String]
+    #
+    # @return [Roo::Base]
+    def self.open_file(source_file)
+      case File.extname(source_file)
+      when ".xls"
+        Roo::Excel.new(source_file)
+      when ".xlsx"
+        Roo::Excelx.new(source_file)
+      else
+        raise ArgumentError, "unknown format: #{source_file}"
+      end
+    end
+
+    # @param sheet      [Roo::Base]
+    # @param row_prefix [String]
+    #
+    # @return [ Hash{ String => Hash{ String => Object } } ]
+    def self.read_sheet(sheet, row_prefix)
       header_keys = sheet.row(HEADER_ROW)
       fixtures = {}
 
@@ -89,7 +103,7 @@ module HeartSeed
         end
 
         suffix = row_value.has_key?("id") ? row_value["id"] : row_num - 1
-        row_name = "#{name}_#{suffix}"
+        row_name = "#{row_prefix}_#{suffix}"
 
         fixtures[row_name] = row_value
       end
