@@ -9,3 +9,5 @@ module HeartSeed
   autoload :DbSeed   , "heart_seed/db_seed"
   autoload :Version  , "heart_seed/version"
 end
+
+require "heart_seed/railtie" if defined?(Rails)
