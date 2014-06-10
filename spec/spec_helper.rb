@@ -26,9 +26,10 @@ require "rake_shared_context"
 # in spec/support/ and its subdirectories.
 Dir["#{__dir__}/support/**/*.rb"].each {|f| require f}
 
-DATA_DIR    = File.join(__dir__, "data")
-FIXTURE_DIR = File.join(__dir__, "fixtures")
-TASK_DIR    = File.join(__dir__, "..", "lib", "heart_seed", "tasks")
+DUMMY_APP_DIR = File.join(__dir__, "dummy")
+DATA_DIR      = File.join(__dir__, "data")
+FIXTURE_DIR   = File.join(__dir__, "fixtures")
+TASK_DIR      = File.join(__dir__, "..", "lib", "heart_seed", "tasks")
 
 require_relative "./db/migration"
 require "database_rewinder"

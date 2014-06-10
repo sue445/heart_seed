@@ -22,7 +22,23 @@ YAML
   task :xls do
     Dir.glob(File.join(xls_dir, "*.{xls,xlsx}")) do |file|
       next if File.basename(file) =~ /^~/
-      puts "convert: #{file}"
+
+      puts "Source File: #{file}"
+      sheets = HeartSeed::Converter.table_sheets(file)
+      sheets.each do |sheet|
+        unless ActiveRecord::Base.connection.table_exists?(sheet)
+          puts "  [#{sheet}] Table is not found"
+          next
+        end
+
+        dist_file = File.join(seed_dir, "#{sheet}.yml")
+        fixtures = HeartSeed::Converter.convert_to_yml(source_file: file, source_sheet: sheet, dist_file: dist_file)
+        if fixtures
+          puts "  [#{sheet}] Create seed: #{dist_file}"
+        else
+          puts "  [#{sheet}] Sheet is empty"
+        end
+      end
     end
   end
 

@@ -34,6 +34,8 @@ module HeartSeed
     # @return [ Hash{ String => Hash{ String => Object } } ]
     def self.convert_to_yml(source_file: nil, source_sheet: nil, dist_file: nil)
       sheet = open_file(source_file).sheet(source_sheet)
+      return nil if empty_sheet?(sheet)
+
       fixtures = read_sheet(sheet, source_sheet)
 
       unless dist_file.blank?
@@ -74,6 +76,10 @@ module HeartSeed
       else
         raise ArgumentError, "unknown format: #{source_file}"
       end
+    end
+
+    def self.empty_sheet?(sheet)
+      sheet.first_row == sheet.last_row || sheet.first_column == sheet.last_column
     end
 
     # @param sheet      [Roo::Base]
