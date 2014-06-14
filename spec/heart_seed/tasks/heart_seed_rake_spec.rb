@@ -20,14 +20,30 @@ describe :heart_seed do
       allow_any_instance_of(Object).to receive(:seed_dir){ temp_dir }
     end
 
-    subject!{ rake["heart_seed:xls"].invoke }
+    after do
+      ENV.delete("FILES")
+    end
 
     context "When not exists ENV" do
+      subject!{ rake["heart_seed:xls"].invoke }
+
       it { expect(Pathname.glob("#{temp_dir}/*")).to have(3).files }
       it { expect(Pathname("#{temp_dir}/articles.yml")).to be_exist }
       it { expect(Pathname("#{temp_dir}/comments.yml")).to be_exist }
       it { expect(Pathname("#{temp_dir}/likes.yml")).to be_exist }
     end
 
+    context "When not exists ENV['FILES']" do
+      before do
+        ENV["FILES"] = "articles.xls"
+      end
+
+      subject!{ rake["heart_seed:xls"].invoke }
+
+      it { expect(Pathname.glob("#{temp_dir}/*")).to have(1).files }
+      it { expect(Pathname("#{temp_dir}/articles.yml")).to be_exist }
+      it { expect(Pathname("#{temp_dir}/comments.yml")).not_to be_exist }
+      it { expect(Pathname("#{temp_dir}/likes.yml")).not_to be_exist }
+    end
   end
 end

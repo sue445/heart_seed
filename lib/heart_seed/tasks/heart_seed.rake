@@ -23,6 +23,8 @@ YAML
     Dir.glob(File.join(xls_dir, "*.{xls,xlsx}")) do |file|
       next if File.basename(file) =~ /^~/
 
+      next unless target_file?(file)
+
       puts "Source File: #{file}"
       sheets = HeartSeed::Converter.table_sheets(file)
       sheets.each do |sheet|
@@ -55,6 +57,12 @@ YAML
   end
 
   private
+  def target_file?(file)
+    return true if ENV["FILES"].blank?
+
+    ENV["FILES"].split(",").include?(File.basename(file))
+  end
+
   def create_file(file, str)
     open(file, "w") do |out|
       out.write(str)
