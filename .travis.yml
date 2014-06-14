@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - 2.0.0
   - 2.1.2
-install: bundle install --jobs=2
+bundler_args: --jobs=2
 script: CODECLIMATE_REPO_TOKEN=9fe512c81149a06ced2b890ab071422bf553cbaf3253fe6830ad75ce92f37516 bundle exec rspec
 branches:
   only:
