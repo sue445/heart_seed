@@ -22,6 +22,12 @@ describe :heart_seed do
 
     subject!{ rake["heart_seed:xls"].invoke }
 
-    it { expect(Pathname("#{temp_dir}/articles.yml")).to be_exist }
+    context "When not exists ENV" do
+      it { expect(Pathname.glob("#{temp_dir}/*")).to have(3).files }
+      it { expect(Pathname("#{temp_dir}/articles.yml")).to be_exist }
+      it { expect(Pathname("#{temp_dir}/comments.yml")).to be_exist }
+      it { expect(Pathname("#{temp_dir}/likes.yml")).to be_exist }
+    end
+
   end
 end

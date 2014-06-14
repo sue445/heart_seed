@@ -18,6 +18,7 @@
 $LOAD_PATH.unshift(File.join(__dir__, "..", "lib"))
 require "heart_seed"
 require "rspec/its"
+require "rspec/collection_matchers"
 require "rspec-parameterized"
 require "pry"
 require "rake_shared_context"

@@ -15,4 +15,17 @@ ActiveRecord::Schema.define(version: 1) do
 
     t.timestamps
   end
+
+  create_table :comments do |t|
+    t.references :article, index: true
+    t.text       :message
+
+    t.timestamps
+  end
+
+  create_table :likes do |t|
+    t.references :article, index: true
+
+    t.timestamps
+  end
 end
