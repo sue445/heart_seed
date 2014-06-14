@@ -33,7 +33,7 @@ describe :heart_seed do
       it { expect(Pathname("#{temp_dir}/likes.yml")).to be_exist }
     end
 
-    context "When not exists ENV['FILES']" do
+    context "When exists ENV['FILES']" do
       before do
         ENV["FILES"] = "articles.xls"
       end
