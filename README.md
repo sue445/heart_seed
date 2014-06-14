@@ -4,7 +4,7 @@ TODO: Write a gem description
 
 [![Build Status](https://travis-ci.org/sue445/heart_seed.svg)](https://travis-ci.org/sue445/heart_seed)
 [![Code Climate](https://codeclimate.com/github/sue445/heart_seed.png)](https://codeclimate.com/github/sue445/heart_seed)
-[![Coverage Status](https://coveralls.io/repos/sue445/heart_seed/badge.png)](https://coveralls.io/r/sue445/heart_seed)
+[![Coverage Status](https://img.shields.io/coveralls/sue445/heart_seed.svg)](https://coveralls.io/r/sue445/heart_seed?branch=master)
 [![Dependency Status](https://gemnasium.com/sue445/heart_seed.svg)](https://gemnasium.com/sue445/heart_seed)
 
 ## Installation
