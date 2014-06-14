@@ -26,6 +26,7 @@ require "heart_seed"
 require "rspec/its"
 require "rspec/collection_matchers"
 require "rspec-parameterized"
+require "rspec/temp_dir"
 require "pry"
 require "rake_shared_context"
 

@@ -1,5 +1,5 @@
 describe :heart_seed do
-  include_context :uses_temp_dir
+  include_context "uses temp dir"
 
   describe :init do
     include_context :rake_in_app_dir do

@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-parameterized"
   spec.add_development_dependency "rspec-its"
   spec.add_development_dependency "rspec-collection_matchers"
+  spec.add_development_dependency "rspec-temp_dir"
   spec.add_development_dependency "yard"
   # spec.add_development_dependency "database_rewinder"
   spec.add_development_dependency "sqlite3"

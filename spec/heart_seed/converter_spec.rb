@@ -14,7 +14,7 @@ describe HeartSeed::Converter do
       let(:source_sheet){ "articles" }
       let(:dist_file)   { "#{temp_dir}/articles.yml" }
 
-      include_context :uses_temp_dir
+      include_context "uses temp dir"
 
       it "should create yaml" do
         subject
