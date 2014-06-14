@@ -3,6 +3,7 @@
 TODO: Write a gem description
 
 [![Build Status](https://travis-ci.org/sue445/heart_seed.svg)](https://travis-ci.org/sue445/heart_seed)
+[![Code Climate](https://codeclimate.com/github/sue445/heart_seed.png)](https://codeclimate.com/github/sue445/heart_seed)
 
 ## Installation
 

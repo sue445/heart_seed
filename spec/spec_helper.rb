@@ -15,6 +15,9 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 $LOAD_PATH.unshift(File.join(__dir__, "..", "lib"))
 require "heart_seed"
 require "rspec/its"
