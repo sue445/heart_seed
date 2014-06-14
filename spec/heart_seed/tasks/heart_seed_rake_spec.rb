@@ -22,6 +22,7 @@ describe :heart_seed do
 
     after do
       ENV.delete("FILES")
+      ENV.delete("SHEETS")
     end
 
     context "When not exists ENV" do
@@ -43,6 +44,19 @@ describe :heart_seed do
       it { expect(Pathname.glob("#{temp_dir}/*")).to have(1).files }
       it { expect(Pathname("#{temp_dir}/articles.yml")).to be_exist }
       it { expect(Pathname("#{temp_dir}/comments.yml")).not_to be_exist }
+      it { expect(Pathname("#{temp_dir}/likes.yml")).not_to be_exist }
+    end
+
+    context "When exists ENV['SHEETS']" do
+      before do
+        ENV["SHEETS"] = "comments"
+      end
+
+      subject!{ rake["heart_seed:xls"].invoke }
+
+      it { expect(Pathname.glob("#{temp_dir}/*")).to have(1).files }
+      it { expect(Pathname("#{temp_dir}/articles.yml")).not_to be_exist }
+      it { expect(Pathname("#{temp_dir}/comments.yml")).to be_exist }
       it { expect(Pathname("#{temp_dir}/likes.yml")).not_to be_exist }
     end
   end

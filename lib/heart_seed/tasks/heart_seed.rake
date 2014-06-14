@@ -33,6 +33,8 @@ YAML
           next
         end
 
+        next unless target_sheet?(sheet)
+
         dist_file = File.join(seed_dir, "#{sheet}.yml")
         fixtures = HeartSeed::Converter.convert_to_yml(source_file: file, source_sheet: sheet, dist_file: dist_file)
         if fixtures
@@ -44,23 +46,17 @@ YAML
     end
   end
 
-  namespace :xls do
-    desc "create seed files by xls file. e.g.) FILE=hoge.xlsx FILES=foo.xlsx,bar.xlsx"
-    task :file do
-
-    end
-
-    desc "create seed file by xls sheet. e.g.) FILE=hoge.xlsx SHEET=foo"
-    task :sheet do
-
-    end
-  end
-
   private
   def target_file?(file)
     return true if ENV["FILES"].blank?
 
     ENV["FILES"].split(",").include?(File.basename(file))
+  end
+
+  def target_sheet?(sheet)
+    return true if ENV["SHEETS"].blank?
+
+    ENV["SHEETS"].split(",").include?(sheet)
   end
 
   def create_file(file, str)
