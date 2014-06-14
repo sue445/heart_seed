@@ -18,6 +18,9 @@
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
+require 'coveralls'
+Coveralls.wear!
+
 $LOAD_PATH.unshift(File.join(__dir__, "..", "lib"))
 require "heart_seed"
 require "rspec/its"
