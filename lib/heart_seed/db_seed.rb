@@ -22,11 +22,22 @@ module HeartSeed
     # import all seed yaml to table
     #
     # @param seed_dir [String]
-    # @param tables   [Array<String>] if empty, import all seed yaml. if not empty, import only these tables.
+    # @param tables   [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
     def self.import_all(seed_dir: seed_dir, tables: [])
+      tables ||= []
+      if tables.class == String
+        if tables.blank?
+          target_tables = []
+        else
+          target_tables = tables.split(",")
+        end
+      else
+        target_tables = tables
+      end
+
       Dir.glob(File.join(seed_dir, "*.yml")) do |file|
         table_name = File.basename(file, '.*')
-        next unless target_table?(table_name, tables)
+        next unless target_table?(table_name, target_tables)
 
         begin
           model_class = table_name.classify.constantize
