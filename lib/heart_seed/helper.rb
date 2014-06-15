@@ -1,5 +1,5 @@
 module HeartSeed
-  module TaskHelper
+  module Helper
     CONFIG_FILE = "config/heart_seed.yml"
 
     def config

@@ -7,7 +7,7 @@ require "activerecord-import"
 module HeartSeed
   autoload :Converter , "heart_seed/converter"
   autoload :DbSeed    , "heart_seed/db_seed"
-  autoload :TaskHelper, "heart_seed/task_helper"
+  autoload :Helper    , "heart_seed/helper"
   autoload :Version   , "heart_seed/version"
 end
 

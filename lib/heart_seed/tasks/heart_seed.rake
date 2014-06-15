@@ -1,6 +1,4 @@
 namespace :heart_seed do
-  include HeartSeed::TaskHelper
-
   desc "create dir and file"
   task :init => ["config/heart_seed.yml", "db/xls", "db/seeds"] do
   end
@@ -20,6 +18,8 @@ YAML
 
   desc "create seed files by xls directory"
   task :xls do
+    include HeartSeed::Helper
+
     Dir.glob(File.join(xls_dir, "*.{xls,xlsx}")) do |file|
       next if File.basename(file) =~ /^~/
 
