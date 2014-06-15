@@ -1,2 +1,2 @@
-seed_dir: db/seed
+seed_dir: db/seeds
 xls_dir: db/xls

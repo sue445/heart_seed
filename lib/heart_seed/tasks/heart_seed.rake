@@ -17,7 +17,7 @@ YAML
   directory "db/seeds"
 
   desc "create seed files by xls directory"
-  task :xls do
+  task :xls => :environment do
     include HeartSeed::Helper
 
     Dir.glob(File.join(xls_dir, "*.{xls,xlsx}")) do |file|
