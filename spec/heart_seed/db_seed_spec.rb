@@ -13,6 +13,11 @@ describe HeartSeed::DbSeed do
 
     let(:seed_dir){ FIXTURE_DIR }
 
+    after do
+      # FIXME can not clear if using `DatabaseRewinder.clean`
+      DatabaseRewinder.clean_all
+    end
+
     context "When empty tables" do
       let(:tables)  { [] }
 
@@ -27,6 +32,23 @@ describe HeartSeed::DbSeed do
       it{ expect{ subject }.to change(Article, :count).by(2) }
       it{ expect{ subject }.to change(Comment, :count).by(0) }
       it{ expect{ subject }.to change(Like   , :count).by(0) }
+    end
+  end
+
+  describe "#parse_arg_tables" do
+    subject{ HeartSeed::DbSeed.parse_arg_tables(tables) }
+
+    where(:tables, :expected) do
+      [
+          [nil                   , []],
+          [""                    , []],
+          [%w(articles comments) , %w(articles comments)],
+          ["articles,comments"   , %w(articles comments)],
+      ]
+    end
+
+    with_them do
+      it{ should eq expected }
     end
   end
 end

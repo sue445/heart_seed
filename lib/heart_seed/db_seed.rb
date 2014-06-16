@@ -22,16 +22,7 @@ module HeartSeed
     # @param seed_dir [String]
     # @param tables   [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
     def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: [])
-      tables ||= []
-      if tables.class == String
-        if tables.blank?
-          target_tables = []
-        else
-          target_tables = tables.split(",")
-        end
-      else
-        target_tables = tables
-      end
+      target_tables = parse_arg_tables(tables)
 
       Dir.glob(File.join(seed_dir, "*.yml")) do |file|
         table_name = File.basename(file, '.*')
@@ -45,6 +36,13 @@ module HeartSeed
           puts "[ERROR] #{e.message}"
         end
       end
+    end
+
+    def self.parse_arg_tables(tables)
+      return [] unless tables
+      return tables if tables.class == Array
+
+      tables.class == String ? tables.split(",") : []
     end
 
     private

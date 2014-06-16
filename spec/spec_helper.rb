@@ -123,6 +123,6 @@ RSpec.configure do |config|
   end
 
   config.after :each do
-    DatabaseRewinder.clean_all
+    DatabaseRewinder.clean
   end
 end
