@@ -2,7 +2,7 @@ module HeartSeed
   module Helper
     CONFIG_FILE = "config/heart_seed.yml"
 
-    def config
+    def self.config
       if File.exists?(CONFIG_FILE)
         YAML.load_file(CONFIG_FILE)
       else
@@ -13,17 +13,17 @@ module HeartSeed
       end
     end
 
-    def seed_dir
+    def self.seed_dir
       dir = config["seed_dir"] || "db/seeds"
       root_dir.join(dir)
     end
 
-    def xls_dir
+    def self.xls_dir
       dir = config["xls_dir"] || "db/xls"
       root_dir.join(dir)
     end
 
-    def root_dir
+    def self.root_dir
       return @root_dir if @root_dir
 
       if defined? Rails
@@ -35,7 +35,7 @@ module HeartSeed
       end
     end
 
-    def root_dir=(dir)
+    def self.root_dir=(dir)
       @root_dir = Pathname.new(dir)
     end
   end

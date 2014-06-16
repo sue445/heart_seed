@@ -18,9 +18,7 @@ YAML
 
   desc "create seed files by xls directory"
   task :xls => :environment do
-    include HeartSeed::Helper
-
-    Dir.glob(File.join(xls_dir, "*.{xls,xlsx}")) do |file|
+    Dir.glob(File.join(HeartSeed::Helper.xls_dir, "*.{xls,xlsx}")) do |file|
       next if File.basename(file) =~ /^~/
 
       next unless target_file?(file)
@@ -35,7 +33,7 @@ YAML
 
         next unless target_sheet?(sheet)
 
-        dist_file = File.join(seed_dir, "#{sheet}.yml")
+        dist_file = File.join(HeartSeed::Helper.seed_dir, "#{sheet}.yml")
         fixtures = HeartSeed::Converter.convert_to_yml(source_file: file, source_sheet: sheet, dist_file: dist_file)
         if fixtures
           puts "  [#{sheet}] Create seed: #{dist_file}"

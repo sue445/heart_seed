@@ -17,7 +17,7 @@ describe :heart_seed do
     include_context :rake_in_app_dir
 
     before do
-      allow_any_instance_of(Object).to receive(:seed_dir){ temp_dir }
+      allow(HeartSeed::Helper).to receive(:seed_dir){ temp_dir }
     end
 
     after do

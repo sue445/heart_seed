@@ -1,7 +1,5 @@
 module HeartSeed
   module DbSeed
-    include HeartSeed::Helper
-
     # delete all records and insert from seed yaml
     #
     # @param source_file [String]
@@ -23,7 +21,7 @@ module HeartSeed
     #
     # @param seed_dir [String]
     # @param tables   [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
-    def self.import_all(seed_dir: seed_dir, tables: [])
+    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: [])
       tables ||= []
       if tables.class == String
         if tables.blank?
