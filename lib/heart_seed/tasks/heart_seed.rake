@@ -74,7 +74,9 @@ YAML
   end
 
   def append_file(file, str)
-    return if File.open(file).read.include?(str)
+    if File.exists?(file)
+      return if File.open(file).read.include?(str)
+    end
 
     File.open(file, "a") do |out|
       out.write(str)
