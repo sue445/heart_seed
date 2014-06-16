@@ -1,6 +1,6 @@
-# HeartSeed
+# [WIP] HeartSeed
 
-TODO: Write a gem description
+seed util (excel -> yaml -> db) 
 
 [![Build Status](https://travis-ci.org/sue445/heart_seed.svg)](https://travis-ci.org/sue445/heart_seed)
 [![Code Climate](https://codeclimate.com/github/sue445/heart_seed.png)](https://codeclimate.com/github/sue445/heart_seed)
@@ -23,7 +23,17 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+1. `bundle exec rake heart_seed:init`
+  * create `config/heart_seed.yml`, `db/xls`, `db/seeds`
+  * append to `db/seeds.rb`
+2. Create xls
+  * example https://github.com/sue445/heart_seed/tree/master/spec/dummy/db/xls
+3. `bundle exec rake heart_seed:xls`
+  * Generate yml to `db/seeds`
+  * If you want to specify files: `FILES=comments_and_likes.xls SHEETS=comments,likes bundle exec rake heart_seed:xls` 
+4. `bundle exec rake db:seed`
+  * Import yml to db
+  * If you want to specify tables: `TABLES=articles,comments bundle exec rake db:seed` 
 
 ## Contributing
 
