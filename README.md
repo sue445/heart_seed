@@ -2,6 +2,7 @@
 
 seed util (excel -> yaml -> db) 
 
+[![Gem Version](https://badge.fury.io/rb/heart_seed.svg)](http://badge.fury.io/rb/heart_seed)
 [![Build Status](https://travis-ci.org/sue445/heart_seed.svg)](https://travis-ci.org/sue445/heart_seed)
 [![Code Climate](https://codeclimate.com/github/sue445/heart_seed.png)](https://codeclimate.com/github/sue445/heart_seed)
 [![Coverage Status](https://img.shields.io/coveralls/sue445/heart_seed.svg)](https://coveralls.io/r/sue445/heart_seed?branch=master)
