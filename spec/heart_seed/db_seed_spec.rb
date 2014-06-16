@@ -13,6 +13,11 @@ describe HeartSeed::DbSeed do
 
     let(:seed_dir){ FIXTURE_DIR }
 
+    before do
+      # FIXME can not clear if using `DatabaseRewinder.clean`
+      DatabaseRewinder.clean_all
+    end
+
     after do
       # FIXME can not clear if using `DatabaseRewinder.clean`
       DatabaseRewinder.clean_all
