@@ -6,11 +6,32 @@ describe :heart_seed do
       let(:app_dir){ temp_dir }
     end
 
-    subject!{ rake["heart_seed:init"].invoke }
+    context "When not exists db/seeds.rb" do
+      subject!{ rake["heart_seed:init"].invoke }
 
-    it { expect(Pathname("config/heart_seed.yml")).to be_exist }
-    it { expect(Pathname("db/xls")).to be_exist }
-    it { expect(Pathname("db/seeds")).to be_exist }
+      it { expect(Pathname("config/heart_seed.yml")).to be_exist }
+      it { expect(Pathname("db/xls")).to be_exist }
+      it { expect(Pathname("db/seeds")).to be_exist }
+      it { expect(Pathname("db/seeds.rb")).to be_exist }
+    end
+
+    context "When already exists db/seeds.rb" do
+      before do
+        FileUtils.mkdir("#{temp_dir}/db")
+        File.open("#{temp_dir}/db/seeds.rb", "w") do |f|
+          f.write("# This is example\n")
+        end
+      end
+
+      subject!{ rake["heart_seed:init"].invoke }
+
+      it { expect(db_seed).to include %q(# This is example) }
+      it { expect(db_seed).to include %q(Appended by `rake heart_seed:init`) }
+
+      def db_seed
+        open("#{temp_dir}/db/seeds.rb").read
+      end
+    end
   end
 
   describe :xls do

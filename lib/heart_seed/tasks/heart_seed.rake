@@ -1,6 +1,14 @@
 namespace :heart_seed do
   desc "create dir and file"
   task :init => ["config/heart_seed.yml", "db/xls", "db/seeds"] do
+    template = <<RUBY
+
+# Appended by `rake heart_seed:init`
+HeartSeed::DbSeed.import_all(tables: ENV["TABLES"])
+
+RUBY
+
+    append_file("db/seeds.rb", template)
   end
 
   file "config/heart_seed.yml" => "config" do
@@ -63,5 +71,15 @@ YAML
     end
 
     puts "create: #{file}"
+  end
+
+  def append_file(file, str)
+    return if File.open(file).read.include?(str)
+
+    File.open(file, "a") do |out|
+      out.write(str)
+    end
+
+    puts "append: #{file}"
   end
 end
