@@ -28,6 +28,7 @@ Or install it yourself as:
   * create `config/heart_seed.yml`, `db/xls`, `db/seeds`
   * append to `db/seeds.rb`
 2. Create xls
+  * sheet name (xls,xlsx) = table name (DB)
   * example https://github.com/sue445/heart_seed/tree/master/spec/dummy/db/xls
 3. `bundle exec rake heart_seed:xls`
   * Generate yml to `db/seeds`
@@ -35,6 +36,12 @@ Or install it yourself as:
 4. `bundle exec rake db:seed`
   * Import yml to db
   * If you want to specify tables: `TABLES=articles,comments bundle exec rake db:seed` 
+
+other Rails: append this to `Rakefile`
+
+```ruby
+require 'heart_seed/tasks/heart_seed'
+```
 
 ## Contributing
 
