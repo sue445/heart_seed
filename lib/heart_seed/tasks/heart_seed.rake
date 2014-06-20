@@ -1,6 +1,6 @@
 namespace :heart_seed do
   desc "create dir and file"
-  task :init => ["config/heart_seed.yml", "db/xls", "db/seeds"] do
+  task :init => ["config/heart_seed.yml", "db/xls/.gitkeep", "db/seeds/.gitkeep"] do
     template = <<RUBY
 
 # Appended by `rake heart_seed:init`
@@ -18,6 +18,14 @@ xls_dir: db/xls
 YAML
 
     create_file("config/heart_seed.yml", template)
+  end
+
+  file "db/xls/.gitkeep" => "db/xls" do
+    create_file("db/xls/.gitkeep")
+  end
+
+  file "db/seeds/.gitkeep" => "db/seeds" do
+    create_file("db/seeds/.gitkeep")
   end
 
   directory "config"
@@ -65,9 +73,9 @@ YAML
     ENV["SHEETS"].split(",").include?(sheet)
   end
 
-  def create_file(file, str)
+  def create_file(file, str = nil)
     open(file, "w") do |out|
-      out.write(str)
+      out.write(str) if str
     end
 
     puts "create: #{file}"
