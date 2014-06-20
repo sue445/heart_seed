@@ -40,7 +40,7 @@ Or install it yourself as:
 other Rails: append this to `Rakefile`
 
 ```ruby
-require 'heart_seed/tasks/heart_seed'
+require 'heart_seed/tasks'
 ```
 
 ## Contributing
