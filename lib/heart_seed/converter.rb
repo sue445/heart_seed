@@ -95,11 +95,11 @@ module HeartSeed
         header_keys.each_with_index do |key, col_index|
           value = sheet.cell(row_num, col_index + 1)
 
-          case sheet.celltype(row_num, col_index + 1)
-          when :float
+          case value
+          when Float
             # ex) 1.0 -> 1
             value = value.to_i if value == value.to_i
-          when :date, :time, :datetime
+          when DateTime
             # value is DateTime and localtime, but not included TimeZone(UTC)
             time = Time.zone.at(value.to_i - Time.zone.utc_offset)
             value = time.to_s
