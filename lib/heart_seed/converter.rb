@@ -87,7 +87,7 @@ module HeartSeed
     #
     # @return [ Hash{ String => Hash{ String => Object } } ]
     def self.read_sheet(sheet, row_prefix)
-      header_keys = sheet.row(HEADER_ROW)
+      header_keys = select_left_of_blank(sheet.row(HEADER_ROW))
       fixtures = {}
 
       (HEADER_ROW + 1 .. sheet.last_row).each do |row_num|
@@ -115,6 +115,16 @@ module HeartSeed
       end
 
       fixtures
+    end
+
+    def self.select_left_of_blank(array)
+      response = []
+      array.each do |element|
+        break unless element
+        break if element.respond_to?(:blank?) && element.blank?
+        response << element
+      end
+      response
     end
   end
 end

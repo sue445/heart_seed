@@ -56,4 +56,20 @@ YAML
 
     it{ should == ["articles", "Sheet2"] }
   end
+
+  describe "#select_left_of_blank" do
+    subject{ HeartSeed::Converter.select_left_of_blank(array) }
+
+    context "When not include blank cell" do
+      let(:array){ ["id", "name"] }
+
+      it{ should eq ["id", "name"] }
+    end
+
+    context "When include blank cell" do
+      let(:array){ ["id", "name", "", "this is not table column"] }
+
+      it{ should eq ["id", "name"] }
+    end
+  end
 end
