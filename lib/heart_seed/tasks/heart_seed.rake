@@ -34,27 +34,29 @@ YAML
 
   desc "create seed files by xls directory"
   task :xls => :environment do
+    ActiveRecord::Migration.verbose = true
     Dir.glob(File.join(HeartSeed::Helper.xls_dir, "*.{xls,xlsx}")) do |file|
       next if File.basename(file) =~ /^~/
 
       next unless target_file?(file)
 
-      puts "Source File: #{file}"
-      sheets = HeartSeed::Converter.table_sheets(file)
-      sheets.each do |sheet|
-        unless ActiveRecord::Base.connection.table_exists?(sheet)
-          puts "  [#{sheet}] Table is not found"
-          next
-        end
+      ActiveRecord::Migration.say_with_time("Source File: #{file}") do
+        sheets = HeartSeed::Converter.table_sheets(file)
+        sheets.each do |sheet|
+          unless ActiveRecord::Base.connection.table_exists?(sheet)
+            ActiveRecord::Migration.say("[#{sheet}] Table is not found", true)
+            next
+          end
 
-        next unless target_sheet?(sheet)
+          next unless target_sheet?(sheet)
 
-        dist_file = File.join(HeartSeed::Helper.seed_dir, "#{sheet}.yml")
-        fixtures = HeartSeed::Converter.convert_to_yml(source_file: file, source_sheet: sheet, dist_file: dist_file)
-        if fixtures
-          puts "  [#{sheet}] Create seed: #{dist_file}"
-        else
-          puts "  [#{sheet}] Sheet is empty"
+          dist_file = File.join(HeartSeed::Helper.seed_dir, "#{sheet}.yml")
+          fixtures = HeartSeed::Converter.convert_to_yml(source_file: file, source_sheet: sheet, dist_file: dist_file)
+          if fixtures
+            ActiveRecord::Migration.say("[#{sheet}] Create seed: #{dist_file}", true)
+          else
+            ActiveRecord::Migration.say("  [#{sheet}] Sheet is empty", true)
+          end
         end
       end
     end

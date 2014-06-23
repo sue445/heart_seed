@@ -24,16 +24,19 @@ module HeartSeed
     def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: [])
       target_tables = parse_arg_tables(tables)
 
+      ActiveRecord::Migration.verbose = true
       Dir.glob(File.join(seed_dir, "*.yml")) do |file|
         table_name = File.basename(file, '.*')
         next unless target_table?(table_name, target_tables)
 
-        begin
-          model_class = table_name.classify.constantize
-          bulk_insert(source_file: file, model_class: model_class)
-          puts "[INFO] #{file} -> #{table_name}"
-        rescue => e
-          puts "[ERROR] #{e.message}"
+        ActiveRecord::Migration.say_with_time("#{file} -> #{table_name}") do
+          begin
+            model_class = table_name.classify.constantize
+            bulk_insert(source_file: file, model_class: model_class)
+            ActiveRecord::Migration.say("[INFO] success", true)
+          rescue => e
+            ActiveRecord::Migration.say("[ERROR] #{e.message}", true)
+          end
         end
       end
     end
