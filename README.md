@@ -43,6 +43,43 @@ other Rails: append this to `Rakefile`
 require 'heart_seed/tasks'
 ```
 
+## Specification
+### Supported xls/xlsx format
+
+Example sheet 
+
+id  | title	 | description  | created_at     |     | this is dummy
+--- | ------ | ------------ | -------------- | --- | -------------- 
+1   | title1 | description1 | 2014/6/1 12:10 |     | foo
+2   | title2 | description2 | 2014/6/2 12:10 | 	   | baz
+
+* Sheet name is mapped table name
+  * If sheet name is not found in database, this is ignored
+* 1st row : table column names
+  * If the spaces are included in the middle, right columns are ignored
+* 2nd row ~ : records
+  * [ActiveSupport::TimeWithZone](http://api.rubyonrails.org/classes/ActiveSupport/TimeWithZone.html) is used for timezone
+
+### Yaml format
+
+example
+
+```yaml
+---
+articles_1:
+  id: 1
+  title: title1
+  description: description1
+  created_at: '2014-06-01 12:10:00 +0900'
+articles_2:
+  id: 2
+  title: title2
+  description: description2
+  created_at: '2014-06-02 12:10:00 +0900'
+```
+
+* same as [ActiveRecord::FixtureSet](http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html) format
+
 ## Contributing
 
 1. Fork it ( https://github.com/sue445/heart_seed/fork )
