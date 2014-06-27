@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/sue445/heart_seed.png?label=ready&title=Ready)](https://waffle.io/sue445/heart_seed)
 # [WIP] HeartSeed
 
 seed util (excel -> yaml -> db) 
