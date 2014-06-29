@@ -54,6 +54,25 @@ describe HeartSeed::DbSeed do
     end
   end
 
+  describe "#import_all_with_shards" do
+    subject{ HeartSeed::DbSeed.import_all_with_shards(seed_dir: seed_dir, tables: tables, catalogs: catalogs, shard_names: shard_names)  }
+
+    let(:seed_dir)   { FIXTURE_DIR }
+    let(:tables)     { [] }
+    let(:catalogs)   { [] }
+    let(:shard_names){ %w(test shard_test) }
+
+    after do
+      # FIXME can not clear if using `DatabaseRewinder.clean`
+      clean_all_shards
+    end
+
+    it{ expect{ subject }.to change(Article     , :count).from(0).to(2) }
+    it{ expect{ subject }.to change(Comment     , :count).from(0).to(2) }
+    it{ expect{ subject }.to change(Like        , :count).from(0).to(1) }
+    it{ expect{ subject }.to change(ShardArticle, :count).from(0).to(1) }
+  end
+
   describe "#parse_string_or_array_arg" do
     subject{ HeartSeed::DbSeed.parse_string_or_array_arg(tables) }
 
