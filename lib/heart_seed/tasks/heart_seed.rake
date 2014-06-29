@@ -15,6 +15,10 @@ RUBY
     template = <<YAML
 seed_dir: db/seeds
 xls_dir: db/xls
+catalogs:
+#  user:
+#  - users
+#  - user_profiles
 YAML
 
     create_file("config/heart_seed.yml", template)

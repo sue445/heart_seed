@@ -11,6 +11,7 @@ module HeartSeed
         {
             "seed_dir" => "db/seeds",
             "xls_dir"  => "db/xls",
+            "catalogs" => {},
         }
       end
     end
@@ -44,6 +45,17 @@ module HeartSeed
     # @param dir [String]
     def self.root_dir=(dir)
       @root_dir = Pathname.new(dir)
+    end
+
+    # @return [Hash{String => Array<String>}] key: catalog name, value: table names
+    def self.catalogs
+      config["catalogs"] || {}
+    end
+
+    # @param catalog_name [String]
+    # @return [Array<String>] table names in a specify catalog
+    def self.catalog_tables(catalog_name)
+      self.catalogs[catalog_name] || []
     end
   end
 end
