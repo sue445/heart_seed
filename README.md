@@ -35,7 +35,7 @@ Or install it yourself as:
 3. `bundle exec rake heart_seed:xls`
   * Generate yml to `db/seeds`
   * If you want to specify files: `FILES=comments_and_likes.xls SHEETS=comments,likes bundle exec rake heart_seed:xls`
-4. `bundle exec rake db:seed`
+4. `bundle exec rake db:seed` or `bundle exec rake heart_seed:db:seed`
   * Import yml to db
   * Exists `TABLES`, `CATALOGS` options
 

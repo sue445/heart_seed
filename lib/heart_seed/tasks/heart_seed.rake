@@ -66,6 +66,13 @@ YAML
     end
   end
 
+  namespace :db do
+    desc "Load the seed data from db/seeds/*.yml (options: TABLES=table1,table2 CATALOGS=catalog1,catalog2)"
+    task :seed => :environment do
+      HeartSeed::DbSeed.import_all
+    end
+  end
+
   private
   def target_file?(file)
     return true if ENV["FILES"].blank?
