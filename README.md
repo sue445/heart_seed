@@ -45,6 +45,19 @@ other Rails: append this to `Rakefile`
 require 'heart_seed/tasks'
 ```
 
+### Snippets
+#### config/heart_seed.yml
+```yml
+seed_dir: db/seeds
+xls_dir: db/xls
+```
+
+#### db/seeds.rb
+```ruby
+# Appended by `rake heart_seed:init`
+HeartSeed::DbSeed.import_all(tables: ENV["TABLES"])
+```
+
 ## Specification
 ### Supported xls/xlsx format
 
