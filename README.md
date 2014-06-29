@@ -37,9 +37,18 @@ Or install it yourself as:
   * If you want to specify files: `FILES=comments_and_likes.xls SHEETS=comments,likes bundle exec rake heart_seed:xls`
 4. `bundle exec rake db:seed`
   * Import yml to db
-  * If you want to specify tables: `TABLES=articles,comments bundle exec rake db:seed`
+  * Exists `TABLES`, `CATALOGS` options
 
-other Rails: append this to `Rakefile`
+examples
+
+```sh
+TABLES=articles,comments bundle exec rake db:seed
+CATALOGS=article,user bundle exec rake db:seed
+```
+
+### other Rails
+
+append this to `Rakefile`
 
 ```ruby
 require 'heart_seed/tasks'
@@ -50,12 +59,16 @@ require 'heart_seed/tasks'
 ```yml
 seed_dir: db/seeds
 xls_dir: db/xls
+catalogs:
+#  user:
+#  - users
+#  - user_profiles
 ```
 
 #### db/seeds.rb
 ```ruby
 # Appended by `rake heart_seed:init`
-HeartSeed::DbSeed.import_all(tables: ENV["TABLES"])
+HeartSeed::DbSeed.import_all
 ```
 
 ## Specification
@@ -94,6 +107,28 @@ articles_2:
 ```
 
 * same as [ActiveRecord::FixtureSet](http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html) format
+
+### Catalog
+Catalog is table groups defined in heart_seed.yml
+
+example
+
+```yml
+catalogs:
+  user:
+  - users
+  - user_profiles
+```
+
+`user` catalog = `users`, `user_profiles` tables
+
+
+You can specify the catalogs at `db:seed` task
+
+```sh
+CATALOGS=user bundle exec rake db:seed
+# same to) TABLES=users,user_profiles bundle exec rake db:seed
+```
 
 ## Contributing
 

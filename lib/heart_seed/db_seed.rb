@@ -21,8 +21,13 @@ module HeartSeed
     #
     # @param seed_dir [String]
     # @param tables   [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
-    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: [])
-      target_tables = parse_arg_tables(tables)
+    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"])
+      # use tables in catalogs
+      target_tables = parse_arg_catalogs(catalogs)
+      if target_tables.empty?
+        # use tables
+        target_tables = parse_string_or_array_arg(tables)
+      end
 
       ActiveRecord::Migration.verbose = true
       Dir.glob(File.join(seed_dir, "*.yml")) do |file|
@@ -41,11 +46,22 @@ module HeartSeed
       end
     end
 
-    def self.parse_arg_tables(tables)
+    def self.parse_string_or_array_arg(tables)
       return [] unless tables
       return tables if tables.class == Array
 
       tables.class == String ? tables.split(",") : []
+    end
+
+    def self.parse_arg_catalogs(catalogs)
+      array_catalogs = parse_string_or_array_arg(catalogs)
+      return [] if array_catalogs.empty?
+
+      tables = []
+      array_catalogs.each do |catalog|
+        tables += HeartSeed::Helper.catalog_tables(catalog)
+      end
+      tables.compact
     end
 
     private

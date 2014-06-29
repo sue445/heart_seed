@@ -4,7 +4,7 @@ namespace :heart_seed do
     template = <<RUBY
 
 # Appended by `rake heart_seed:init`
-HeartSeed::DbSeed.import_all(tables: ENV["TABLES"])
+HeartSeed::DbSeed.import_all
 
 RUBY
 
@@ -15,6 +15,10 @@ RUBY
     template = <<YAML
 seed_dir: db/seeds
 xls_dir: db/xls
+catalogs:
+#  user:
+#  - users
+#  - user_profiles
 YAML
 
     create_file("config/heart_seed.yml", template)
