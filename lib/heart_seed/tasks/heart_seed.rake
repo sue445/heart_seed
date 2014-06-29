@@ -36,7 +36,7 @@ YAML
   directory "db/xls"
   directory "db/seeds"
 
-  desc "create seed files by xls directory"
+  desc "create seed files by xls directory (options: FILES=table1.xls,table2.xlsx SHEETS=sheet1,sheet2)"
   task :xls => :environment do
     ActiveRecord::Migration.verbose = true
     Dir.glob(File.join(HeartSeed::Helper.xls_dir, "*.{xls,xlsx}")) do |file|
