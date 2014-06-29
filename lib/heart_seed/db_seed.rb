@@ -21,7 +21,7 @@ module HeartSeed
     #
     # @param seed_dir [String]
     # @param tables   [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
-    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: [])
+    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"])
       target_tables = parse_arg_tables(tables)
 
       ActiveRecord::Migration.verbose = true

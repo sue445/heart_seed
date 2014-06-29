@@ -55,7 +55,7 @@ xls_dir: db/xls
 #### db/seeds.rb
 ```ruby
 # Appended by `rake heart_seed:init`
-HeartSeed::DbSeed.import_all(tables: ENV["TABLES"])
+HeartSeed::DbSeed.import_all
 ```
 
 ## Specification

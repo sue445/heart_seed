@@ -4,7 +4,7 @@ namespace :heart_seed do
     template = <<RUBY
 
 # Appended by `rake heart_seed:init`
-HeartSeed::DbSeed.import_all(tables: ENV["TABLES"])
+HeartSeed::DbSeed.import_all
 
 RUBY
 
