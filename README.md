@@ -1,6 +1,6 @@
-# [WIP] HeartSeed
+# HeartSeed
 
-seed util (excel -> yaml -> db)
+seed util (convert excel to yaml and insert yaml to db)
 
 [![Gem Version](https://badge.fury.io/rb/heart_seed.svg)](http://badge.fury.io/rb/heart_seed)
 [![Build Status](https://travis-ci.org/sue445/heart_seed.svg)](https://travis-ci.org/sue445/heart_seed)

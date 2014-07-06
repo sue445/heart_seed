@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = HeartSeed::VERSION
   spec.authors       = ["sue445"]
   spec.email         = ["sue445@sue445.net"]
-  spec.summary       = %q{[WIP] seed util (excel -> yaml -> db) }
-  spec.description   = %q{[WIP] seed util (excel -> yaml -> db) }
+  spec.summary       = %q{seed util (convert excel to yaml and insert yaml to db) }
+  spec.description   = %q{seed util (convert excel to yaml and insert yaml to db) }
   spec.homepage      = "https://github.com/sue445/heart_seed"
   spec.license       = "MIT"
 
