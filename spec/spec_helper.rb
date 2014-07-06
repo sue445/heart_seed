@@ -29,6 +29,7 @@ require "rspec-parameterized"
 require "rspec/temp_dir"
 require "pry"
 require "rake_shared_context"
+require "database_rewinder"
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -39,8 +40,8 @@ DATA_DIR      = File.join(__dir__, "data")
 FIXTURE_DIR   = File.join(__dir__, "fixtures")
 TASK_DIR      = File.join(__dir__, "..", "lib", "heart_seed", "tasks")
 
-require_relative "./db/migration"
-require "database_rewinder"
+require_relative "./db/setup"
+require_relative "./db/test_models"
 
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience

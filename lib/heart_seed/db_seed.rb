@@ -21,6 +21,7 @@ module HeartSeed
     #
     # @param seed_dir [String]
     # @param tables   [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
+    # @param catalogs [Array<String>,String] catalogs names array or comma separated catalog names. if empty, import all seed yaml. if not empty, import only these tables in catalogs.
     def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"])
       # use tables in catalogs
       target_tables = parse_arg_catalogs(catalogs)
@@ -42,6 +43,21 @@ module HeartSeed
           rescue => e
             ActiveRecord::Migration.say("[ERROR] #{e.message}", true)
           end
+        end
+      end
+    end
+
+    # import all seed yaml to table with specified shards
+    #
+    # @param seed_dir    [String]
+    # @param tables      [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
+    # @param catalogs    [Array<String>,String] catalogs names array or comma separated catalog names. if empty, import all seed yaml. if not empty, import only these tables in catalogs.
+    # @param shard_names [Array<String>]
+    def self.import_all_with_shards(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], shard_names: [])
+      shard_names.each do |shard_name|
+        ActiveRecord::Migration.say_with_time("import to shard: #{shard_name}") do
+          ActiveRecord::Base.establish_connection(shard_name.to_sym)
+          import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs)
         end
       end
     end
