@@ -130,6 +130,20 @@ CATALOGS=user bundle exec rake db:seed
 # same to) TABLES=users,user_profiles bundle exec rake db:seed
 ```
 
+### Shard DB
+When you use shard DB, write like this to `db/seeds.rb`.
+
+Rails example
+
+```ruby
+SHARD_NAMES = %W(
+  #{Rails.env}
+  shard_#{Rails.env}
+  shard2_#{Rails.env}
+)
+HeartSeed::DbSeed.import_all(shard_names: SHARD_NAMES)
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/sue445/heart_seed/fork )
