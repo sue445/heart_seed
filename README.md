@@ -141,7 +141,7 @@ SHARD_NAMES = %W(
   shard_#{Rails.env}
   shard2_#{Rails.env}
 )
-HeartSeed::DbSeed.import_all(shard_names: SHARD_NAMES)
+HeartSeed::DbSeed.import_all_with_shards(shard_names: SHARD_NAMES)
 ```
 
 ## Contributing
