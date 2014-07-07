@@ -30,6 +30,8 @@ module HeartSeed
         target_tables = parse_string_or_array_arg(tables)
       end
 
+      railse "require TABLES or CATALOGS if production" if HeartSeed::Helper.production? && target_tables.empty?
+
       ActiveRecord::Migration.verbose = true
       Dir.glob(File.join(seed_dir, "*.yml")) do |file|
         table_name = File.basename(file, '.*')

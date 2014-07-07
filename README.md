@@ -10,6 +10,10 @@ seed util (convert excel to yaml and insert yaml to db)
 
 [![Stories in Ready](https://badge.waffle.io/sue445/heart_seed.png?label=ready&title=Ready)](https://waffle.io/sue445/heart_seed)
 
+## Require
+* ruby 2.0+
+* [Ruby on Rails](http://rubyonrails.org/) , [Padrino](http://www.padrinorb.com/) or other ruby app
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -46,13 +50,16 @@ TABLES=articles,comments bundle exec rake db:seed
 CATALOGS=article,user bundle exec rake db:seed
 ```
 
-### other Rails
+### not Rails
 
 append this to `Rakefile`
 
 ```ruby
 require 'heart_seed/tasks'
 ```
+
+### Note
+* if production `db:seed`, require `ENV["TABLES"]` or `ENV["CATALOGS"]`
 
 ### Snippets
 #### config/heart_seed.yml
