@@ -57,5 +57,19 @@ module HeartSeed
     def self.catalog_tables(catalog_name)
       self.catalogs[catalog_name] || []
     end
+
+    # @param default [String]
+    # @return [String] {Rails.env}, PADRINO_ENV, RACK_ENV or default
+    def self.environment(default="development")
+      env ||= Rails.env          if defined? Rails
+      env ||= ENV["PADRINO_ENV"] if ENV["PADRINO_ENV"]
+      env ||= ENV["RACK_ENV"]    if ENV["RACK_ENV"]
+      env ||= default
+      env
+    end
+
+    def self.production?
+      environment == "production"
+    end
   end
 end
