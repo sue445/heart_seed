@@ -7,6 +7,7 @@ seed util (convert excel to yaml and insert yaml to db)
 [![Code Climate](https://codeclimate.com/github/sue445/heart_seed.png)](https://codeclimate.com/github/sue445/heart_seed)
 [![Coverage Status](https://img.shields.io/coveralls/sue445/heart_seed.svg)](https://coveralls.io/r/sue445/heart_seed?branch=master)
 [![Dependency Status](https://gemnasium.com/sue445/heart_seed.svg)](https://gemnasium.com/sue445/heart_seed)
+[![Inline docs](http://inch-ci.org/github/sue445/heart_seed.svg?branch=master)](http://inch-ci.org/github/sue445/heart_seed)
 
 [![Stories in Ready](https://badge.waffle.io/sue445/heart_seed.png?label=ready&title=Ready)](https://waffle.io/sue445/heart_seed)
 
