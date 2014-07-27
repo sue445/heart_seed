@@ -62,8 +62,13 @@ describe HeartSeed::DbSeed do
     let(:catalogs)   { [] }
     let(:shard_names){ %w(test shard_test) }
 
-    after do
-      # FIXME can not clear if using `DatabaseRewinder.clean`
+    around do |example|
+      # FIXME for travis unstable test
+      # https://github.com/sue445/heart_seed/issues/11
+      clean_all_shards
+
+      example.run
+
       clean_all_shards
     end
 
