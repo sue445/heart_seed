@@ -5,7 +5,7 @@ module HeartSeed
     # read config/heart_seed.yml
     # @return [Hash{String => String}]
     def self.config
-      if File.exists?(CONFIG_FILE)
+      if File.exist?(CONFIG_FILE)
         YAML.load_file(CONFIG_FILE)
       else
         {
@@ -60,7 +60,7 @@ module HeartSeed
 
     # @param default [String]
     # @return [String] {Rails.env}, PADRINO_ENV, RACK_ENV or default
-    def self.environment(default="development")
+    def self.environment(default = "development")
       env ||= Rails.env          if defined? Rails
       env ||= ENV["PADRINO_ENV"] if ENV["PADRINO_ENV"]
       env ||= ENV["RACK_ENV"]    if ENV["RACK_ENV"]

@@ -62,8 +62,6 @@ module HeartSeed
       open_file(source_file).sheets.select{|sheet| sheet =~ /^[A-Za-z0-9_]+$/ }
     end
 
-    private
-
     # @param source_file [String]
     #
     # @return [Roo::Base]
@@ -77,10 +75,12 @@ module HeartSeed
         raise ArgumentError, "unknown format: #{source_file}"
       end
     end
+    private_class_method :open_file
 
     def self.empty_sheet?(sheet)
       sheet.first_row == sheet.last_row || sheet.first_column == sheet.last_column
     end
+    private_class_method :empty_sheet?
 
     # @param sheet      [Roo::Base]
     # @param row_prefix [String]
@@ -108,7 +108,7 @@ module HeartSeed
           row_value[key] = value
         end
 
-        suffix = row_value.has_key?("id") ? row_value["id"] : row_num - 1
+        suffix = row_value.key?("id") ? row_value["id"] : row_num - 1
         row_name = "#{row_prefix}_#{suffix}"
 
         fixtures[row_name] = row_value
@@ -116,6 +116,7 @@ module HeartSeed
 
       fixtures
     end
+    private_class_method :read_sheet
 
     def self.select_left_of_blank(array)
       response = []

@@ -55,7 +55,14 @@ describe HeartSeed::DbSeed do
   end
 
   describe "#import_all_with_shards" do
-    subject{ HeartSeed::DbSeed.import_all_with_shards(seed_dir: seed_dir, tables: tables, catalogs: catalogs, shard_names: shard_names)  }
+    subject do
+      HeartSeed::DbSeed.import_all_with_shards(
+          seed_dir:    seed_dir,
+          tables:      tables,
+          catalogs:    catalogs,
+          shard_names: shard_names
+      )
+    end
 
     let(:seed_dir)   { FIXTURE_DIR }
     let(:tables)     { [] }

@@ -74,6 +74,7 @@ YAML
   end
 
   private
+
   def target_file?(file)
     return true if ENV["FILES"].blank?
 
@@ -95,9 +96,7 @@ YAML
   end
 
   def append_file(file, str)
-    if File.exists?(file)
-      return if File.open(file).read.include?(str)
-    end
+    return if File.exist?(file) && File.open(file).read.include?(str)
 
     File.open(file, "a") do |out|
       out.write(str)

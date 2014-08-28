@@ -82,10 +82,10 @@ module HeartSeed
       tables.compact
     end
 
-    private
     def self.target_table?(source_table, target_tables)
       return true if target_tables.empty?
-      return target_tables.include?(source_table)
+      target_tables.include?(source_table)
     end
+    private_class_method :target_table?
   end
 end
