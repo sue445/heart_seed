@@ -3,7 +3,7 @@ MAIN_SHARD = "test"
 
 SHARD_NAMES.each do |shard_name|
   db_file = File.join(__dir__, "#{shard_name}.sqlite3")
-  FileUtils.rm(db_file) if File.exists?(db_file)
+  FileUtils.rm(db_file) if File.exist?(db_file)
 
   ActiveRecord::Base.configurations[shard_name] = {
       adapter:  "sqlite3",
