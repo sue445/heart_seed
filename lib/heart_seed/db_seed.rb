@@ -1,6 +1,8 @@
 module HeartSeed
   module DbSeed
-    # delete all records and insert from seed yaml
+    BULK = "bulk"
+    ACTIVE_RECORD = "active_record"
+    # delete all records and bulk insert from seed yaml
     #
     # @param source_file [String]
     # @param model_class [Class] require. extends {ActiveRecord::Base}
@@ -17,12 +19,27 @@ module HeartSeed
       end
     end
 
+    # delete all records and insert from seed yaml
+    #
+    # @param source_file [String]
+    # @param model_class [Class] require. extends {ActiveRecord::Base}
+    def self.insert(source_file: nil, model_class: nil)
+      fixtures = HeartSeed::Converter.read_fixture_yml(source_file)
+      model_class.transaction do
+        model_class.delete_all
+        fixtures.each do |fixture|
+          model_class.create(fixture)
+        end
+      end
+    end
+
     # import all seed yaml to table
     #
-    # @param seed_dir [String]
-    # @param tables   [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
-    # @param catalogs [Array<String>,String] catalogs names array or comma separated catalog names. if empty, import all seed yaml. if not empty, import only these tables in catalogs.
-    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"])
+    # @param seed_dir    [String]
+    # @param tables      [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
+    # @param catalogs    [Array<String>,String] catalogs names array or comma separated catalog names. if empty, import all seed yaml. if not empty, import only these tables in catalogs.
+    # @param insert_mode [String] 'bulk' or other string. if empty or 'bulk', using bulk insert. if not empty and not 'bulk', import with ActiveRecord.
+    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], insert_mode: ENV["INSERT_MODE"] || BULK)
       # use tables in catalogs
       target_tables = parse_arg_catalogs(catalogs)
       if target_tables.empty?
@@ -40,7 +57,11 @@ module HeartSeed
         ActiveRecord::Migration.say_with_time("#{file} -> #{table_name}") do
           begin
             model_class = table_name.classify.constantize
-            bulk_insert(source_file: file, model_class: model_class)
+            if insert_mode == ACTIVE_RECORD
+              insert(source_file: file, model_class: model_class)
+            else
+              bulk_insert(source_file: file, model_class: model_class)
+            end
             ActiveRecord::Migration.say("[INFO] success", true)
           rescue => e
             ActiveRecord::Migration.say("[ERROR] #{e.message}", true)
@@ -54,12 +75,13 @@ module HeartSeed
     # @param seed_dir    [String]
     # @param tables      [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
     # @param catalogs    [Array<String>,String] catalogs names array or comma separated catalog names. if empty, import all seed yaml. if not empty, import only these tables in catalogs.
+    # @param insert_mode [String] 'bulk' or other string. if empty or 'bulk', using bulk insert. if not empty and not 'bulk', import with ActiveRecord.
     # @param shard_names [Array<String>]
-    def self.import_all_with_shards(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], shard_names: [])
+    def self.import_all_with_shards(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], insert_mode: ENV["INSERT_MODE"] || BULK, shard_names: [])
       shard_names.each do |shard_name|
         ActiveRecord::Migration.say_with_time("import to shard: #{shard_name}") do
           ActiveRecord::Base.establish_connection(shard_name.to_sym)
-          import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs)
+          import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs, insert_mode: insert_mode)
         end
       end
     end
