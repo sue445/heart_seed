@@ -1,17 +1,17 @@
 describe HeartSeed::DbSeed do
   describe "#bulk_insert" do
-    subject{ HeartSeed::DbSeed.bulk_insert(source_file: source_file, model_class: model_class) }
+    subject{ HeartSeed::DbSeed.bulk_insert(file_path: file_path, model_class: model_class) }
 
-    let(:source_file){ "#{FIXTURE_DIR}/articles.yml" }
+    let(:file_path){ "#{FIXTURE_DIR}/articles.yml" }
     let(:model_class){ Article }
 
     it{ expect{ subject }.to change(Article, :count).by(2) }
   end
 
   describe "#insert" do
-    subject { HeartSeed::DbSeed.insert(source_file: source_file, model_class: model_class) }
+    subject { HeartSeed::DbSeed.insert(file_path: file_path, model_class: model_class) }
 
-    let(:source_file) { "#{FIXTURE_DIR}/comments.yml" }
+    let(:file_path) { "#{FIXTURE_DIR}/comments.yml" }
     let(:model_class) { Comment }
 
     it{ expect{ subject }.to change(Comment, :count).by(2) }

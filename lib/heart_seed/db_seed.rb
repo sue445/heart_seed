@@ -4,10 +4,10 @@ module HeartSeed
     ACTIVE_RECORD = "active_record"
     # delete all records and bulk insert from seed yaml
     #
-    # @param source_file [String]
+    # @param file_path [String]
     # @param model_class [Class] require. extends {ActiveRecord::Base}
-    def self.bulk_insert(source_file: nil, model_class: nil)
-      fixtures = HeartSeed::Converter.read_fixture_yml(source_file)
+    def self.bulk_insert(file_path: nil, model_class: nil)
+      fixtures = HeartSeed::Converter.read_fixture_yml(file_path)
       models = fixtures.each_with_object([]) do |fixture, response|
         response << model_class.new(fixture)
         response
@@ -21,10 +21,10 @@ module HeartSeed
 
     # delete all records and insert from seed yaml
     #
-    # @param source_file [String]
+    # @param file_path [String]
     # @param model_class [Class] require. extends {ActiveRecord::Base}
-    def self.insert(source_file: nil, model_class: nil)
-      fixtures = HeartSeed::Converter.read_fixture_yml(source_file)
+    def self.insert(file_path: nil, model_class: nil)
+      fixtures = HeartSeed::Converter.read_fixture_yml(file_path)
       model_class.transaction do
         model_class.delete_all
         fixtures.each do |fixture|
@@ -41,26 +41,26 @@ module HeartSeed
     # @param insert_mode [String] 'bulk' or other string. if empty or 'bulk', using bulk insert. if not empty and not 'bulk', import with ActiveRecord.
     def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], insert_mode: ENV["INSERT_MODE"] || BULK)
       # use tables in catalogs
-      target_tables = parse_arg_catalogs(catalogs)
-      if target_tables.empty?
+      target_table_names = parse_arg_catalogs(catalogs)
+      if target_table_names.empty?
         # use tables
-        target_tables = parse_string_or_array_arg(tables)
+        target_table_names = parse_string_or_array_arg(tables)
       end
 
-      raise "require TABLES or CATALOGS if production" if HeartSeed::Helper.production? && target_tables.empty?
+      raise "require TABLES or CATALOGS if production" if HeartSeed::Helper.production? && target_table_names.empty?
 
       ActiveRecord::Migration.verbose = true
-      Dir.glob(File.join(seed_dir, "*.yml")) do |file|
-        table_name = File.basename(file, '.*')
-        next unless target_table?(table_name, target_tables)
+      Dir.glob(File.join(seed_dir, "*.yml")) do |file_path|
+        table_name = File.basename(file_path, '.*')
+        next unless target_table?(table_name, target_table_names)
 
-        ActiveRecord::Migration.say_with_time("#{file} -> #{table_name}") do
+        ActiveRecord::Migration.say_with_time("#{file_path} -> #{table_name}") do
           begin
             model_class = table_name.classify.constantize
             if insert_mode == ACTIVE_RECORD
-              insert(source_file: file, model_class: model_class)
+              insert(file_path: file_path, model_class: model_class)
             else
-              bulk_insert(source_file: file, model_class: model_class)
+              bulk_insert(file_path: file_path, model_class: model_class)
             end
             ActiveRecord::Migration.say("[INFO] success", true)
           rescue => e
