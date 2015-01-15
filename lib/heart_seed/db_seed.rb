@@ -45,9 +45,8 @@ module HeartSeed
     # @param insert_mode [String] const ACTIVE_RECORD or other string.
     #                      if empty or not ACTIVE_RECORD, using bulk insert.
     #                      if ACTIVE_RECORD, import with ActiveRecord.
-    def self.import_all(
-      seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], mode: ENV["MODE"] || BULK)
-
+    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], mode: ENV["MODE"])
+      mode ||= BULK
       target_table_names = parse_target_table_names(tables: tables, catalogs: catalogs)
 
       raise "require TABLES or CATALOGS if production" if HeartSeed::Helper.production? && target_table_names.empty?
