@@ -78,7 +78,7 @@ catalogs:
 # Appended by `rake heart_seed:init`
 HeartSeed::DbSeed.import_all
 # If you want to insert by ActiveRecord, replase like this.
-HeartSeed::DbSeed.import_all(insert_mode: HeartSeed::DbSeed::ACTIVE_RECORD)
+HeartSeed::DbSeed.import_all(mode: HeartSeed::DbSeed::ACTIVE_RECORD)
 ```
 
 ## Specification

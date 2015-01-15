@@ -18,12 +18,12 @@ describe HeartSeed::DbSeed do
   end
 
   describe "#import_all" do
-    subject{ HeartSeed::DbSeed.import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs, insert_mode: insert_mode) }
+    subject{ HeartSeed::DbSeed.import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs, mode: mode) }
 
     let(:seed_dir)   { FIXTURE_DIR }
     let(:tables)     { [] }
     let(:catalogs)   { [] }
-    let(:insert_mode){}
+    let(:mode){}
 
     before do
       # FIXME can not clear if using `DatabaseRewinder.clean`
@@ -63,8 +63,8 @@ describe HeartSeed::DbSeed do
       it{ expect{ subject }.to change(Like   , :count).by(1) }
     end
 
-    context "When specify insert_mode" do
-      let(:insert_mode) { HeartSeed::DbSeed::ACTIVE_RECORD }
+    context "When specify mode" do
+      let(:mode) { HeartSeed::DbSeed::ACTIVE_RECORD }
 
       it{ expect{ subject }.to change(Article, :count).by(2) }
       it{ expect{ subject }.to change(Comment, :count).by(2) }
@@ -85,6 +85,7 @@ describe HeartSeed::DbSeed do
     let(:seed_dir)   { FIXTURE_DIR }
     let(:tables)     { [] }
     let(:catalogs)   { [] }
+    let(:mode)       {}
     let(:shard_names){ %w(test shard_test) }
 
     around do |example|
