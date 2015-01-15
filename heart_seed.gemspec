@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-collection_matchers"
   spec.add_development_dependency "rspec-temp_dir"
   spec.add_development_dependency "yard"
-  # spec.add_development_dependency "database_rewinder"
+  spec.add_development_dependency "database_rewinder", "> 0.2.0"
   spec.add_development_dependency "sqlite3"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "pry-remote"
