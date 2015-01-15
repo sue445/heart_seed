@@ -47,12 +47,8 @@ module HeartSeed
     #                      if ACTIVE_RECORD, import with ActiveRecord.
     def self.import_all(
       seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], mode: ENV["MODE"] || BULK)
-      # use tables in catalogs
-      target_table_names = parse_arg_catalogs(catalogs)
-      if target_table_names.empty?
-        # use tables
-        target_table_names = parse_string_or_array_arg(tables)
-      end
+
+      target_table_names = parse_target_table_names(tables: tables, catalogs: catalogs)
 
       raise "require TABLES or CATALOGS if production" if HeartSeed::Helper.production? && target_table_names.empty?
 
@@ -63,12 +59,7 @@ module HeartSeed
 
         ActiveRecord::Migration.say_with_time("#{file_path} -> #{table_name}") do
           begin
-            model_class = table_name.classify.constantize
-            if mode == ACTIVE_RECORD
-              insert(file_path: file_path, model_class: model_class)
-            else
-              bulk_insert(file_path: file_path, model_class: model_class)
-            end
+            insert_seed(file_path: file_path, table_name: table_name, mode: mode)
             ActiveRecord::Migration.say("[INFO] success", true)
           rescue => e
             ActiveRecord::Migration.say("[ERROR] #{e.message}", true)
@@ -100,6 +91,16 @@ module HeartSeed
       end
     end
 
+    def self.parse_target_table_names(tables: nil, catalogs: nil)
+      # use tables in catalogs
+      target_table_names = parse_arg_catalogs(catalogs)
+      return target_table_names unless target_table_names.empty?
+
+      # use tables
+      parse_string_or_array_arg(tables)
+    end
+    private_class_method :parse_target_table_names
+
     def self.parse_string_or_array_arg(tables)
       return [] unless tables
       return tables if tables.class == Array
@@ -123,5 +124,19 @@ module HeartSeed
       target_tables.include?(source_table)
     end
     private_class_method :target_table?
+
+    # insert yaml file to table
+    # @param file_path  [String] source seed yaml file
+    # @param table_name [String] output destination table
+    # @param mode       [String] #{BULK} or #{ACTIVE_RECORD}
+    def self.insert_seed(file_path: nil, table_name: nil, mode: BULK)
+      model_class = table_name.classify.constantize
+      if mode == ACTIVE_RECORD
+        insert(file_path: file_path, model_class: model_class)
+      else
+        bulk_insert(file_path: file_path, model_class: model_class)
+      end
+    end
+    private_class_method :insert_seed
   end
 end
