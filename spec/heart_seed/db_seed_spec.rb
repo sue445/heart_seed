@@ -1,19 +1,29 @@
 describe HeartSeed::DbSeed do
   describe "#bulk_insert" do
-    subject{ HeartSeed::DbSeed.bulk_insert(source_file: source_file, model_class: model_class)  }
+    subject{ HeartSeed::DbSeed.bulk_insert(file_path: file_path, model_class: model_class) }
 
-    let(:source_file){ "#{FIXTURE_DIR}/articles.yml" }
+    let(:file_path){ "#{FIXTURE_DIR}/articles.yml" }
     let(:model_class){ Article }
 
     it{ expect{ subject }.to change(Article, :count).by(2) }
   end
 
-  describe "#import_all" do
-    subject{ HeartSeed::DbSeed.import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs)  }
+  describe "#insert" do
+    subject { HeartSeed::DbSeed.insert(file_path: file_path, model_class: model_class) }
 
-    let(:seed_dir){ FIXTURE_DIR }
-    let(:tables)  { [] }
-    let(:catalogs){ [] }
+    let(:file_path) { "#{FIXTURE_DIR}/comments.yml" }
+    let(:model_class) { Comment }
+
+    it{ expect{ subject }.to change(Comment, :count).by(2) }
+  end
+
+  describe "#import_all" do
+    subject{ HeartSeed::DbSeed.import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs, mode: mode) }
+
+    let(:seed_dir)   { FIXTURE_DIR }
+    let(:tables)     { [] }
+    let(:catalogs)   { [] }
+    let(:mode){}
 
     before do
       # FIXME can not clear if using `DatabaseRewinder.clean`
@@ -52,6 +62,14 @@ describe HeartSeed::DbSeed do
       it{ expect{ subject }.to change(Comment, :count).by(0) }
       it{ expect{ subject }.to change(Like   , :count).by(1) }
     end
+
+    context "When specify mode" do
+      let(:mode) { HeartSeed::DbSeed::ACTIVE_RECORD }
+
+      it{ expect{ subject }.to change(Article, :count).by(2) }
+      it{ expect{ subject }.to change(Comment, :count).by(2) }
+      it{ expect{ subject }.to change(Like   , :count).by(1) }
+    end
   end
 
   describe "#import_all_with_shards" do
@@ -67,6 +85,7 @@ describe HeartSeed::DbSeed do
     let(:seed_dir)   { FIXTURE_DIR }
     let(:tables)     { [] }
     let(:catalogs)   { [] }
+    let(:mode)       {}
     let(:shard_names){ %w(test shard_test) }
 
     around do |example|

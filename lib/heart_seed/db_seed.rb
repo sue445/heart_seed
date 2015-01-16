@@ -1,11 +1,13 @@
 module HeartSeed
   module DbSeed
-    # delete all records and insert from seed yaml
+    BULK = "bulk"
+    ACTIVE_RECORD = "active_record"
+    # delete all records and bulk insert from seed yaml
     #
-    # @param source_file [String]
+    # @param file_path [String]
     # @param model_class [Class] require. extends {ActiveRecord::Base}
-    def self.bulk_insert(source_file: nil, model_class: nil)
-      fixtures = HeartSeed::Converter.read_fixture_yml(source_file)
+    def self.bulk_insert(file_path: nil, model_class: nil)
+      fixtures = HeartSeed::Converter.read_fixture_yml(file_path)
       models = fixtures.each_with_object([]) do |fixture, response|
         response << model_class.new(fixture)
         response
@@ -17,30 +19,46 @@ module HeartSeed
       end
     end
 
+    # delete all records and insert from seed yaml
+    #
+    # @param file_path [String]
+    # @param model_class [Class] require. extends {ActiveRecord::Base}
+    def self.insert(file_path: nil, model_class: nil)
+      fixtures = HeartSeed::Converter.read_fixture_yml(file_path)
+      model_class.transaction do
+        model_class.delete_all
+        fixtures.each do |fixture|
+          model_class.create(fixture)
+        end
+      end
+    end
+
     # import all seed yaml to table
     #
-    # @param seed_dir [String]
-    # @param tables   [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
-    # @param catalogs [Array<String>,String] catalogs names array or comma separated catalog names. if empty, import all seed yaml. if not empty, import only these tables in catalogs.
-    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"])
-      # use tables in catalogs
-      target_tables = parse_arg_catalogs(catalogs)
-      if target_tables.empty?
-        # use tables
-        target_tables = parse_string_or_array_arg(tables)
-      end
+    # @param seed_dir    [String]
+    # @param tables      [Array<String>,String] table names array or comma separated table names.
+    #                      if empty, import all seed yaml.
+    #                      if not empty, import only these tables.
+    # @param catalogs    [Array<String>,String] catalogs names array or comma separated catalog names.
+    #                      if empty, import all seed yaml.
+    #                      if not empty, import only these tables in catalogs.
+    # @param insert_mode [String] const ACTIVE_RECORD or other string.
+    #                      if empty or not ACTIVE_RECORD, using bulk insert.
+    #                      if ACTIVE_RECORD, import with ActiveRecord.
+    def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], mode: ENV["MODE"])
+      mode ||= BULK
+      target_table_names = parse_target_table_names(tables: tables, catalogs: catalogs)
 
-      raise "require TABLES or CATALOGS if production" if HeartSeed::Helper.production? && target_tables.empty?
+      raise "require TABLES or CATALOGS if production" if HeartSeed::Helper.production? && target_table_names.empty?
 
       ActiveRecord::Migration.verbose = true
-      Dir.glob(File.join(seed_dir, "*.yml")) do |file|
-        table_name = File.basename(file, '.*')
-        next unless target_table?(table_name, target_tables)
+      Dir.glob(File.join(seed_dir, "*.yml")) do |file_path|
+        table_name = File.basename(file_path, '.*')
+        next unless target_table?(table_name, target_table_names)
 
-        ActiveRecord::Migration.say_with_time("#{file} -> #{table_name}") do
+        ActiveRecord::Migration.say_with_time("#{file_path} -> #{table_name}") do
           begin
-            model_class = table_name.classify.constantize
-            bulk_insert(source_file: file, model_class: model_class)
+            insert_seed(file_path: file_path, table_name: table_name, mode: mode)
             ActiveRecord::Migration.say("[INFO] success", true)
           rescue => e
             ActiveRecord::Migration.say("[ERROR] #{e.message}", true)
@@ -52,17 +70,35 @@ module HeartSeed
     # import all seed yaml to table with specified shards
     #
     # @param seed_dir    [String]
-    # @param tables      [Array<String>,String] table names array or comma separated table names. if empty, import all seed yaml. if not empty, import only these tables.
-    # @param catalogs    [Array<String>,String] catalogs names array or comma separated catalog names. if empty, import all seed yaml. if not empty, import only these tables in catalogs.
+    # @param tables      [Array<String>,String] table names array or comma separated table names.
+    #                      if empty, import all seed yaml.
+    #                      if not empty, import only these tables.
+    # @param catalogs    [Array<String>,String] catalogs names array or comma separated catalog names.
+    #                      if empty, import all seed yaml.
+    #                      if not empty, import only these tables in catalogs.
+    # @param insert_mode [String] const ACTIVE_RECORD or other string.
+    #                      if empty or not ACTIVE_RECORD, using bulk insert.
+    #                      if ACTIVE_RECORD, import with ActiveRecord.
     # @param shard_names [Array<String>]
-    def self.import_all_with_shards(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], shard_names: [])
+    def self.import_all_with_shards(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"],
+                                    mode: ENV["MODE"] || BULK, shard_names: [])
       shard_names.each do |shard_name|
         ActiveRecord::Migration.say_with_time("import to shard: #{shard_name}") do
           ActiveRecord::Base.establish_connection(shard_name.to_sym)
-          import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs)
+          import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs, mode: mode)
         end
       end
     end
+
+    def self.parse_target_table_names(tables: nil, catalogs: nil)
+      # use tables in catalogs
+      target_table_names = parse_arg_catalogs(catalogs)
+      return target_table_names unless target_table_names.empty?
+
+      # use tables
+      parse_string_or_array_arg(tables)
+    end
+    private_class_method :parse_target_table_names
 
     def self.parse_string_or_array_arg(tables)
       return [] unless tables
@@ -87,5 +123,19 @@ module HeartSeed
       target_tables.include?(source_table)
     end
     private_class_method :target_table?
+
+    # insert yaml file to table
+    # @param file_path  [String] source seed yaml file
+    # @param table_name [String] output destination table
+    # @param mode       [String] #{BULK} or #{ACTIVE_RECORD}
+    def self.insert_seed(file_path: nil, table_name: nil, mode: BULK)
+      model_class = table_name.classify.constantize
+      if mode == ACTIVE_RECORD
+        insert(file_path: file_path, model_class: model_class)
+      else
+        bulk_insert(file_path: file_path, model_class: model_class)
+      end
+    end
+    private_class_method :insert_seed
   end
 end
