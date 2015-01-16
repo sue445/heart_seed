@@ -1,5 +1,11 @@
 ## master
-[full changelog](https://github.com/sue445/heart_seed/compare/v0.0.3...master)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.0.4...master)
+
+## 0.0.4 (2015/01/16)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.0.3...v0.0.4)
+
+* Support insert by ActiveRecord (thx @takeshit19)
+  * https://github.com/sue445/heart_seed/pull/17
 
 ## 0.0.3 (2014/07/25)
 [full changelog](https://github.com/sue445/heart_seed/compare/v0.0.2...v0.0.3)
