@@ -52,13 +52,32 @@ module HeartSeed
       raise "require TABLES or CATALOGS if production" if HeartSeed::Helper.production? && target_table_names.empty?
 
       ActiveRecord::Migration.verbose = true
-      Dir.glob(File.join(seed_dir, "*.yml")) do |file_path|
-        table_name = File.basename(file_path, '.*')
-        next unless target_table?(table_name, target_table_names)
 
-        ActiveRecord::Migration.say_with_time("#{file_path} -> #{table_name}") do
-          insert_seed(file_path: file_path, table_name: table_name, mode: mode)
-          ActiveRecord::Migration.say("[INFO] success", true)
+      if target_table_names.empty?
+        # seed all tables
+        Dir.glob(File.join(seed_dir, "*.yml")) do |file_path|
+          table_name = File.basename(file_path, '.*')
+
+          ActiveRecord::Migration.say_with_time("#{file_path} -> #{table_name}") do
+            insert_seed(file_path: file_path, table_name: table_name, mode: mode)
+            ActiveRecord::Migration.say("[INFO] success", true)
+          end
+        end
+
+      else
+        # seed specified tables (follow the order)
+        target_table_names.each do |table_name|
+          file_path = File.join(seed_dir, "#{table_name}.yml")
+
+          unless File.exists?(file_path)
+            ActiveRecord::Migration.say("[WARN] #{file_path} is not exists")
+            next
+          end
+
+          ActiveRecord::Migration.say_with_time("#{file_path} -> #{table_name}") do
+            insert_seed(file_path: file_path, table_name: table_name, mode: mode)
+            ActiveRecord::Migration.say("[INFO] success", true)
+          end
         end
       end
     end
@@ -113,12 +132,6 @@ module HeartSeed
       end
       tables.compact
     end
-
-    def self.target_table?(source_table, target_tables)
-      return true if target_tables.empty?
-      target_tables.include?(source_table)
-    end
-    private_class_method :target_table?
 
     # insert yaml file to table
     # @param file_path  [String] source seed yaml file
