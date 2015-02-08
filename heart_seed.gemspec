@@ -25,10 +25,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activesupport", ">= 3.0.0"
   spec.add_dependency "roo", ">= 1.13.2"
 
-  spec.add_development_dependency "bundler", "~> 1.6"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "codeclimate-test-reporter"
   spec.add_development_dependency "coveralls"
-  spec.add_development_dependency "database_rewinder", "> 0.2.0"
+  spec.add_development_dependency "database_rewinder", ">= 0.4.2"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "pry-nav"
   spec.add_development_dependency "pry-remote"

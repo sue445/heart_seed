@@ -10,7 +10,7 @@ SHARD_NAMES.each do |shard_name|
       # database: ":memory:",
       database: db_file,
       timeout:  500
-  }
+  }.with_indifferent_access
 
   DatabaseRewinder.create_cleaner(shard_name)
   ActiveRecord::Base.establish_connection(shard_name.to_sym)

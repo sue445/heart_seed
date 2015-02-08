@@ -120,6 +120,12 @@ RSpec.configure do |config|
 
   # database_rewinder
   config.before :suite do
+    # FIXME: fool automatic_reconnect ...
+    # https://github.com/rails/rails/blob/v4.2.0/activerecord/lib/active_record/connection_adapters/abstract/connection_pool.rb#L444
+    SHARD_NAMES.each do |shard_name|
+      DatabaseRewinder[nil, connection: shard_name].pool.automatic_reconnect = true
+    end
+
     DatabaseRewinder.clean_all
     # or
     # DatabaseRewinder.clean_with :any_arg_that_would_be_actually_ignored_anyway
