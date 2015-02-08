@@ -57,12 +57,8 @@ module HeartSeed
         next unless target_table?(table_name, target_table_names)
 
         ActiveRecord::Migration.say_with_time("#{file_path} -> #{table_name}") do
-          begin
-            insert_seed(file_path: file_path, table_name: table_name, mode: mode)
-            ActiveRecord::Migration.say("[INFO] success", true)
-          rescue => e
-            ActiveRecord::Migration.say("[ERROR] #{e.message}", true)
-          end
+          insert_seed(file_path: file_path, table_name: table_name, mode: mode)
+          ActiveRecord::Migration.say("[INFO] success", true)
         end
       end
     end

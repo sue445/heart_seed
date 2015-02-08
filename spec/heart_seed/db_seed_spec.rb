@@ -20,7 +20,7 @@ describe HeartSeed::DbSeed do
     end
 
     context "When invalid data" do
-      let(:file_path) { "#{FIXTURE_DIR}/invalid_comments.yml" }
+      let(:file_path) { "#{FIXTURE_DIR}/invalid/invalid_comments.yml" }
 
       it{ expect{ subject }.to raise_error ActiveRecord::RecordInvalid }
       it{ expect{ subject rescue nil }.to change(Comment, :count).by(0) }
