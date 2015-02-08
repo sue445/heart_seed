@@ -1,0 +1,9 @@
+---
+comments_1:
+  id: 1
+  article_id: 1
+  message: message1
+comments_2:
+  id: 2
+  article_id: 0  # this is invalid!
+  message: message2

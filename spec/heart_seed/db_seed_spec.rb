@@ -11,10 +11,20 @@ describe HeartSeed::DbSeed do
   describe "#insert" do
     subject { HeartSeed::DbSeed.insert(file_path: file_path, model_class: model_class) }
 
-    let(:file_path) { "#{FIXTURE_DIR}/comments.yml" }
     let(:model_class) { Comment }
 
-    it{ expect{ subject }.to change(Comment, :count).by(2) }
+    context "When valid data" do
+      let(:file_path) { "#{FIXTURE_DIR}/comments.yml" }
+
+      it{ expect{ subject }.to change(Comment, :count).by(2) }
+    end
+
+    context "When invalid data" do
+      let(:file_path) { "#{FIXTURE_DIR}/invalid_comments.yml" }
+
+      it{ expect{ subject }.to raise_error ActiveRecord::RecordInvalid }
+      it{ expect{ subject rescue nil }.to change(Comment, :count).by(0) }
+    end
   end
 
   describe "#import_all" do
