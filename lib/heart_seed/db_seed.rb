@@ -133,12 +133,6 @@ module HeartSeed
       tables.compact
     end
 
-    def self.target_table?(source_table, target_tables)
-      return true if target_tables.empty?
-      target_tables.include?(source_table)
-    end
-    private_class_method :target_table?
-
     # insert yaml file to table
     # @param file_path  [String] source seed yaml file
     # @param table_name [String] output destination table
