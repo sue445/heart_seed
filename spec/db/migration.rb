@@ -5,26 +5,26 @@ ActiveRecord::Schema.define(version: 1) do
     t.string :title
     t.text   :description
 
-    t.timestamps
+    t.timestamps null: false
   end
 
   create_table :comments do |t|
     t.references :article, index: true
     t.text       :message
 
-    t.timestamps
+    t.timestamps null: false
   end
 
   create_table :likes do |t|
     t.references :article, index: true
 
-    t.timestamps
+    t.timestamps null: false
   end
 
   create_table :shard_articles do |t|
     t.string :title
     t.text   :description
 
-    t.timestamps
+    t.timestamps null: false
   end
 end
