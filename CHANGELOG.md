@@ -1,5 +1,14 @@
 ## master
-[full changelog](https://github.com/sue445/heart_seed/compare/v0.0.4...master)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.0.5...master)
+
+## 0.0.5 (2015/02/09)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.0.4...v0.0.5)
+
+* Stop db:seed When invalid fixture
+  * https://github.com/sue445/heart_seed/issues/22
+  * https://github.com/sue445/heart_seed/issues/23
+* execute seed do follow the order in catalog file
+  * https://github.com/sue445/heart_seed/issues/24
 
 ## 0.0.4 (2015/01/16)
 [full changelog](https://github.com/sue445/heart_seed/compare/v0.0.3...v0.0.4)
