@@ -28,7 +28,7 @@ module HeartSeed
       model_class.transaction do
         model_class.delete_all
         fixtures.each do |fixture|
-          model_class.create(fixture)
+          model_class.create!(fixture)
         end
       end
     end
