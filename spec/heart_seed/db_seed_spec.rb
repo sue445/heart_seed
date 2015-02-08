@@ -25,16 +25,6 @@ describe HeartSeed::DbSeed do
     let(:catalogs)   { [] }
     let(:mode){}
 
-    before do
-      # FIXME can not clear if using `DatabaseRewinder.clean`
-      DatabaseRewinder.clean_all
-    end
-
-    after do
-      # FIXME can not clear if using `DatabaseRewinder.clean`
-      DatabaseRewinder.clean_all
-    end
-
     context "When empty tables" do
       it{ expect{ subject }.to change(Article, :count).by(2) }
       it{ expect{ subject }.to change(Comment, :count).by(2) }
