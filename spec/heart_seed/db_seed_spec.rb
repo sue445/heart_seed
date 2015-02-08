@@ -54,8 +54,15 @@ describe HeartSeed::DbSeed do
 
       before do
         allow(HeartSeed::Helper).to receive(:catalogs){
-          { "article" => ["articles", "likes"] }
+          { "article" => ["articles", "likes", "missing_table"] }
         }
+      end
+
+      it "should execute seed do follow the order in catalog file" do
+        expect(HeartSeed::DbSeed).to receive(:insert_seed).with(hash_including(table_name: "articles")).ordered
+        expect(HeartSeed::DbSeed).to receive(:insert_seed).with(hash_including(table_name: "likes")).ordered
+        expect(HeartSeed::DbSeed).not_to receive(:insert_seed).with(hash_including(table_name: "missing_table")).ordered
+        subject
       end
 
       it{ expect{ subject }.to change(Article, :count).by(2) }
