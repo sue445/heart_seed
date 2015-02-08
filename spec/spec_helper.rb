@@ -16,11 +16,15 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 if ENV["COVERAGE"]
+  require "simplecov"
+  require "coveralls"
   require "codeclimate-test-reporter"
-  CodeClimate::TestReporter.start
 
-  require 'coveralls'
-  Coveralls.wear!
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+    CodeClimate::TestReporter::Formatter,
+    Coveralls::SimpleCov::Formatter
+  ]
+  SimpleCov.start
 end
 
 $LOAD_PATH.unshift(File.join(__dir__, "..", "lib"))
