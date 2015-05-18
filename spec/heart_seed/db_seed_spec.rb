@@ -27,6 +27,29 @@ describe HeartSeed::DbSeed do
     end
   end
 
+  describe "#insert_or_update" do
+    subject { HeartSeed::DbSeed.insert_or_update(file_path: file_path, model_class: model_class) }
+
+    let(:file_path){ "#{FIXTURE_DIR}/articles.yml" }
+    let(:model_class){ Article }
+
+    context "When not exists same data" do
+      it{ expect{ subject }.to change(Article, :count).by(2) }
+    end
+
+    context "When exists same data" do
+      before do
+        HeartSeed::DbSeed.insert(file_path: old_file_path, model_class: model_class)
+      end
+
+      let(:old_file_path){ "#{FIXTURE_DIR}/other/old_articles.yml" }
+
+      it{ expect{ subject }.to change(Article, :count).from(2).to(3) }
+      it{ expect{ subject }.to change{ Article.find(1).title }.from("old title1").to("title1") }
+      it{ expect{ subject }.to change{ Article.find(1).description }.from("old description1").to("description1") }
+    end
+  end
+
   describe "#import_all" do
     subject{ HeartSeed::DbSeed.import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs, mode: mode) }
 

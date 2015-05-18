@@ -33,6 +33,24 @@ module HeartSeed
       end
     end
 
+    # insert records. if same record exists, updated
+    #
+    # @param file_path [String]
+    # @param model_class [Class] require. extends {ActiveRecord::Base}
+    def self.insert_or_update(file_path: nil, model_class: nil)
+      fixtures = HeartSeed::Converter.read_fixture_yml(file_path)
+      model_class.transaction do
+        fixtures.each do |fixture|
+          model = model_class.find_by(id: fixture["id"])
+          if model
+            model.update!(fixture)
+          else
+            model_class.create!(fixture)
+          end
+        end
+      end
+    end
+
     # import all seed yaml to table
     #
     # @param seed_dir    [String]
