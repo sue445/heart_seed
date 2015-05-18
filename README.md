@@ -29,6 +29,11 @@ Or install it yourself as:
 
     $ gem install heart_seed
 
+### xls support
+If you want to use `.xls` file (NOT `.xlsx` file), `gem install` (or write to Gemfile) [roo-xls](https://github.com/roo-rb/roo-xls) too
+
+**[And see License!](#license)**
+
 ## Usage
 
 1. `bundle exec rake heart_seed:init`
@@ -153,6 +158,14 @@ SHARD_NAMES = %W(
 )
 HeartSeed::DbSeed.import_all_with_shards(shard_names: SHARD_NAMES)
 ```
+
+
+## License
+While heart_seed is licensed under the MIT license, please note that the 'spreadsheet' gem is released under the GPLv3 license.
+
+* https://github.com/roo-rb/roo#additional-libraries
+* https://github.com/roo-rb/roo-xls#license
+* https://github.com/zdavatz/spreadsheet/blob/master/LICENSE.txt
 
 ## Contributing
 
