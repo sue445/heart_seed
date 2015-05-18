@@ -166,7 +166,7 @@ MODE=(bulk|active_record|update) bundle exec rake db:seed
 
 * `bulk`(default): using bulk insert. (`delete_all` and BULK INSERT)
 * `active_record`: import with ActiveRecord. (`delete_all` and `create!`)
-* `update`: import with ActiveRecord. (if exists same record, `update!`)
+* `update`: import with ActiveRecord. (if exists same record, `update!`, otherwise `create!`)
 
 ## License
 While heart_seed is licensed under the MIT license, please note that the 'spreadsheet' gem is released under the GPLv3 license.
