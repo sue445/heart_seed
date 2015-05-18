@@ -4,6 +4,11 @@ require "active_record"
 require "yaml"
 require "activerecord-import"
 
+begin
+  require "roo-xls"
+rescue LoadError
+end
+
 module HeartSeed
   autoload :Converter , "heart_seed/converter"
   autoload :DbSeed    , "heart_seed/db_seed"
