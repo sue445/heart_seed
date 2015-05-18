@@ -2,6 +2,8 @@ module HeartSeed
   module DbSeed
     BULK = "bulk"
     ACTIVE_RECORD = "active_record"
+    UPDATE = "update"
+
     # delete all records and bulk insert from seed yaml
     #
     # @param file_path [String]
@@ -60,9 +62,10 @@ module HeartSeed
     # @param catalogs    [Array<String>,String] catalogs names array or comma separated catalog names.
     #                      if empty, import all seed yaml.
     #                      if not empty, import only these tables in catalogs.
-    # @param insert_mode [String] const ACTIVE_RECORD or other string.
-    #                      if empty or not ACTIVE_RECORD, using bulk insert.
-    #                      if ACTIVE_RECORD, import with ActiveRecord.
+    # @param insert_mode [String] const `ACTIVE_RECORD` or `UPDATE` other string.
+    #                      if `ACTIVE_RECORD`, import with ActiveRecord. (`delete_all` and `create!`)
+    #                      if `UPDATE`, import with ActiveRecord. (if exists same record, `update!`)
+    #                      other, using bulk insert. (`delete_all` and BULK INSERT)
     def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], mode: ENV["MODE"])
       mode ||= BULK
       target_table_names = parse_target_table_names(tables: tables, catalogs: catalogs)
@@ -109,9 +112,10 @@ module HeartSeed
     # @param catalogs    [Array<String>,String] catalogs names array or comma separated catalog names.
     #                      if empty, import all seed yaml.
     #                      if not empty, import only these tables in catalogs.
-    # @param insert_mode [String] const ACTIVE_RECORD or other string.
-    #                      if empty or not ACTIVE_RECORD, using bulk insert.
-    #                      if ACTIVE_RECORD, import with ActiveRecord.
+    # @param insert_mode [String] const `ACTIVE_RECORD` or `UPDATE` other string.
+    #                      if `ACTIVE_RECORD`, import with ActiveRecord. (`delete_all` and `create!`)
+    #                      if `UPDATE`, import with ActiveRecord. (if exists same record, `update!`)
+    #                      other, using bulk insert. (`delete_all` and BULK INSERT)
     # @param shard_names [Array<String>]
     def self.import_all_with_shards(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"],
                                     mode: ENV["MODE"] || BULK, shard_names: [])
@@ -154,12 +158,14 @@ module HeartSeed
     # insert yaml file to table
     # @param file_path  [String] source seed yaml file
     # @param table_name [String] output destination table
-    # @param mode       [String] #{BULK} or #{ACTIVE_RECORD}
+    # @param mode       [String] #{BULK}, #{UPDARE} or #{ACTIVE_RECORD}
     def self.insert_seed(file_path: nil, table_name: nil, mode: BULK)
       model_class = table_name.classify.constantize
       case mode
       when ACTIVE_RECORD
         insert(file_path: file_path, model_class: model_class)
+      when UPDATE
+        insert_or_update(file_path: file_path, model_class: model_class)
       else
         # default is BULK mode
         bulk_insert(file_path: file_path, model_class: model_class)
