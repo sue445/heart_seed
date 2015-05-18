@@ -139,9 +139,11 @@ module HeartSeed
     # @param mode       [String] #{BULK} or #{ACTIVE_RECORD}
     def self.insert_seed(file_path: nil, table_name: nil, mode: BULK)
       model_class = table_name.classify.constantize
-      if mode == ACTIVE_RECORD
+      case mode
+      when ACTIVE_RECORD
         insert(file_path: file_path, model_class: model_class)
       else
+        # default is BULK mode
         bulk_insert(file_path: file_path, model_class: model_class)
       end
     end
