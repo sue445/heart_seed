@@ -9,7 +9,7 @@
 * Upgrade to roo v2.0.0 and roo-xls v1.0.0
   * https://github.com/sue445/heart_seed/pull/29
 
-### Note
+### [Note] Tweak License!
 * If you want to use xls support, read [License](https://github.com/sue445/heart_seed#license) and 
   add [roo-xls](https://github.com/roo-rb/roo-xls) to your Gemfile
   * https://github.com/sue445/heart_seed#xls-support
