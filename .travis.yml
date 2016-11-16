@@ -1,15 +1,17 @@
 language: ruby
 rvm:
-- 2.0
 - 2.1
 - 2.2
+- 2.3.1
 - ruby-head
 bundler_args: "--jobs=2"
 cache: bundler
 before_script:
 - export CODECLIMATE_REPO_TOKEN=9fe512c81149a06ced2b890ab071422bf553cbaf3253fe6830ad75ce92f37516
 - export COVERAGE=true
-script: bundle exec rspec
+script:
+- bundle exec rspec
+- bundle exec codeclimate-test-reporter
 branches:
   only:
   - master
