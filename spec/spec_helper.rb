@@ -18,12 +18,8 @@
 if ENV["COVERAGE"]
   require "simplecov"
   require "coveralls"
-  require "codeclimate-test-reporter"
 
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-    CodeClimate::TestReporter::Formatter,
-    Coveralls::SimpleCov::Formatter
-  ]
+  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
   SimpleCov.start
 end
 
