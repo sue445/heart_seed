@@ -50,6 +50,39 @@ describe HeartSeed::DbSeed do
     end
   end
 
+  context "When validate: false" do
+    subject { HeartSeed::DbSeed.send(method, file_path: file_path, model_class: model_class, validate: false) }
+
+    let(:file_path) { "#{FIXTURE_DIR}/invalid/invalid_comments.yml" }
+    let(:model_class) { Comment }
+
+    describe "#bulk_insert" do
+      let(:method) { :bulk_insert }
+      it{ expect{ subject }.to change(Comment, :count).by(2) }
+    end
+
+    describe "#insert" do
+      let(:method) { :insert }
+      it{ expect{ subject }.to change(Comment, :count).by(2) }
+    end
+
+    describe "#insert_or_update" do
+      let(:method) { :insert_or_update }
+
+      context "When insert" do
+        it{ expect{ subject }.to change(Comment, :count).by(2) }
+      end
+
+      context "When update" do
+        before { HeartSeed::DbSeed.insert(file_path: original_file_path, model_class: model_class) }
+
+        let(:original_file_path) { "#{FIXTURE_DIR}/comments.yml" }
+
+        it{ expect{ subject }.to change{ Comment.find(2).article_id }.from(1).to(0) }
+      end
+    end
+  end
+
   describe "#import_all" do
     subject{ HeartSeed::DbSeed.import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs, mode: mode) }
 
