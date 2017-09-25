@@ -119,11 +119,11 @@ module HeartSeed
     #                      other, using bulk insert. (`delete_all` and BULK INSERT)
     # @param shard_names [Array<String>]
     def self.import_all_with_shards(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"],
-                                    mode: ENV["MODE"] || BULK, shard_names: [])
+                                    mode: ENV["MODE"] || BULK, shard_names: [], validate: true)
       shard_names.each do |shard_name|
         ActiveRecord::Migration.say_with_time("import to shard: #{shard_name}") do
           ActiveRecord::Base.establish_connection(shard_name.to_sym)
-          import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs, mode: mode)
+          import_all(seed_dir: seed_dir, tables: tables, catalogs: catalogs, mode: mode, validate: validate)
         end
       end
     end
