@@ -8,6 +8,7 @@ module HeartSeed
     #
     # @param file_path [String]
     # @param model_class [Class] require. extends {ActiveRecord::Base}
+    # @param validate [Boolean] run ActiveRecord's validation. default: true
     def self.bulk_insert(file_path: nil, model_class: nil, validate: true)
       fixtures = HeartSeed::Converter.read_fixture_yml(file_path)
       models = fixtures.each_with_object([]) do |fixture, response|
@@ -25,6 +26,7 @@ module HeartSeed
     #
     # @param file_path [String]
     # @param model_class [Class] require. extends {ActiveRecord::Base}
+    # @param validate [Boolean] run ActiveRecord's validation. default: true
     def self.insert(file_path: nil, model_class: nil, validate: true)
       fixtures = HeartSeed::Converter.read_fixture_yml(file_path)
       model_class.transaction do
@@ -39,6 +41,7 @@ module HeartSeed
     #
     # @param file_path [String]
     # @param model_class [Class] require. extends {ActiveRecord::Base}
+    # @param validate [Boolean] run ActiveRecord's validation. default: true
     def self.insert_or_update(file_path: nil, model_class: nil, validate: true)
       fixtures = HeartSeed::Converter.read_fixture_yml(file_path)
       model_class.transaction do
@@ -67,6 +70,7 @@ module HeartSeed
     #                      if `ACTIVE_RECORD`, import with ActiveRecord. (`delete_all` and `create!`)
     #                      if `UPDATE`, import with ActiveRecord. (if exists same record, `update!`)
     #                      other, using bulk insert. (`delete_all` and BULK INSERT)
+    # @param validate    [Boolean] run ActiveRecord's validation. default: true
     def self.import_all(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"], mode: ENV["MODE"], validate: true)
       mode ||= BULK
       target_table_names = parse_target_table_names(tables: tables, catalogs: catalogs)
@@ -118,6 +122,7 @@ module HeartSeed
     #                      if `UPDATE`, import with ActiveRecord. (if exists same record, `update!`)
     #                      other, using bulk insert. (`delete_all` and BULK INSERT)
     # @param shard_names [Array<String>]
+    # @param validate    [Boolean] run ActiveRecord's validation. default: true
     def self.import_all_with_shards(seed_dir: HeartSeed::Helper.seed_dir, tables: ENV["TABLES"], catalogs: ENV["CATALOGS"],
                                     mode: ENV["MODE"] || BULK, shard_names: [], validate: true)
       shard_names.each do |shard_name|
@@ -160,6 +165,7 @@ module HeartSeed
     # @param file_path  [String] source seed yaml file
     # @param table_name [String] output destination table
     # @param mode       [String] #{BULK}, #{UPDARE} or #{ACTIVE_RECORD}
+    # @param validate   [Boolean] run ActiveRecord's validation. default: true
     def self.insert_seed(file_path: nil, table_name: nil, mode: BULK, validate: true)
       model_class = table_name.classify.constantize
       case mode
