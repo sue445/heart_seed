@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rake_shared_context", "0.2.2"
   spec.add_development_dependency "roo-xls"
-  spec.add_development_dependency "rspec", "3.0.0"
+  spec.add_development_dependency "rspec"
   spec.add_development_dependency "rspec-collection_matchers"
   spec.add_development_dependency "rspec-its"
   spec.add_development_dependency "rspec-parameterized"
