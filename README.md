@@ -82,8 +82,12 @@ catalogs:
 ```ruby
 # Appended by `rake heart_seed:init`
 HeartSeed::DbSeed.import_all
+
 # If you want to insert by ActiveRecord, replase like this.
 HeartSeed::DbSeed.import_all(mode: HeartSeed::DbSeed::ACTIVE_RECORD)
+
+# If you want to skip model validation in insert, add `validate: false` (default is true)
+HeartSeed::DbSeed.import_all(validate: true)
 ```
 
 ## Specification
