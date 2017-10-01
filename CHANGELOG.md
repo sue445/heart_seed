@@ -1,5 +1,11 @@
 ## master
-[full changelog](https://github.com/sue445/heart_seed/compare/v0.1.0...master)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.2.0...master)
+
+## 0.2.0 (2017/10/01)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.1.0...v0.2.0)
+
+* Add :validate parameter
+  * https://github.com/sue445/heart_seed/pull/32
 
 ## 0.1.0 (2015/05/19)
 [full changelog](https://github.com/sue445/heart_seed/compare/v0.0.5...v0.1.0)
