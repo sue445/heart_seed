@@ -8,8 +8,6 @@ seed util (convert excel to yaml and insert yaml to db)
 [![Coverage Status](https://img.shields.io/coveralls/sue445/heart_seed.svg)](https://coveralls.io/r/sue445/heart_seed?branch=master)
 [![Inline docs](http://inch-ci.org/github/sue445/heart_seed.svg?branch=master)](http://inch-ci.org/github/sue445/heart_seed)
 
-[![Stories in Ready](https://badge.waffle.io/sue445/heart_seed.png?label=ready&title=Ready)](https://waffle.io/sue445/heart_seed)
-
 ## Require
 * ruby 2.0+
 * [Ruby on Rails](http://rubyonrails.org/) , [Padrino](http://www.padrinorb.com/) or other ruby app
