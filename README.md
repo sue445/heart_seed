@@ -34,17 +34,17 @@ If you want to use `.xls` file (NOT `.xlsx` file), `gem install` (or write to Ge
 ## Usage
 
 1. `bundle exec rake heart_seed:init`
-  * create `config/heart_seed.yml`, `db/xls`, `db/seeds`
-  * append to `db/seeds.rb`
+    * create `config/heart_seed.yml`, `db/xls`, `db/seeds`
+    * append to `db/seeds.rb`
 2. Create xls
-  * sheet name (xls,xlsx) = table name (DB)
-  * example https://github.com/sue445/heart_seed/tree/master/spec/dummy/db/xls
+    * sheet name (xls,xlsx) = table name (DB)
+    * example https://github.com/sue445/heart_seed/tree/master/spec/dummy/db/xls
 3. `bundle exec rake heart_seed:xls`
-  * Generate yml to `db/seeds`
-  * If you want to specify files: `FILES=comments_and_likes.xls SHEETS=comments,likes bundle exec rake heart_seed:xls`
+    * Generate yml to `db/seeds`
+    * If you want to specify files: `FILES=comments_and_likes.xls SHEETS=comments,likes bundle exec rake heart_seed:xls`
 4. `bundle exec rake db:seed` or `bundle exec rake heart_seed:db:seed`
-  * Import yml to db
-  * Exists `TABLES`, `CATALOGS` options
+    * Import yml to db
+    * Exists `TABLES`, `CATALOGS` options
 
 examples
 
