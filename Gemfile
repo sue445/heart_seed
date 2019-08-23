@@ -7,6 +7,11 @@ if Gem::Version.create(RUBY_VERSION) < Gem::Version.create("2.2.2")
   # NOTE: rails 5+ requires Ruby 2.2.2+
   gem "activerecord", "< 5.0.0"
   gem "activesupport", "< 5.0.0"
+
+elsif Gem::Version.create(RUBY_VERSION) < Gem::Version.create("2.5.0")
+  # NOTE: rails 6+ requires Ruby 2.5.0+
+  gem "activerecord", "< 6.0.0"
+  gem "activesupport", "< 6.0.0"
 end
 
 if Gem::Version.create(RUBY_VERSION) < Gem::Version.create("2.5.0")
