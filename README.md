@@ -3,7 +3,7 @@
 seed util (convert excel to yaml and insert yaml to db)
 
 [![Gem Version](https://badge.fury.io/rb/heart_seed.svg)](http://badge.fury.io/rb/heart_seed)
-[![Build Status](https://travis-ci.org/sue445/heart_seed.svg)](https://travis-ci.org/sue445/heart_seed)
+[![Build Status](https://github.com/sue445/heart_seed/workflows/test/badge.svg?branch=master)](https://github.com/sue445/heart_seed/actions?query=workflow%3Atest)
 [![Code Climate](https://codeclimate.com/github/sue445/heart_seed.png)](https://codeclimate.com/github/sue445/heart_seed)
 [![Coverage Status](https://img.shields.io/coveralls/sue445/heart_seed.svg)](https://coveralls.io/r/sue445/heart_seed?branch=master)
 [![Inline docs](http://inch-ci.org/github/sue445/heart_seed.svg?branch=master)](http://inch-ci.org/github/sue445/heart_seed)
