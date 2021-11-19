@@ -1,5 +1,11 @@
 ## master
-[full changelog](https://github.com/sue445/heart_seed/compare/v0.2.0...master)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.2.1...master)
+
+## 0.2.1 (2021/11/20)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.2.0...v0.2.1)
+
+* Enable MFA requirement for gem releasing
+  * https://github.com/sue445/heart_seed/pull/57
 
 ## 0.2.0 (2017/10/01)
 [full changelog](https://github.com/sue445/heart_seed/compare/v0.1.0...v0.2.0)
