@@ -24,8 +24,8 @@ else
   gem "activerecord", "< 6.1.0"
   gem "activesupport", "< 6.1.0"
 
-  # https://github.com/rails/rails/blob/v6.0.0/activerecord/lib/active_record/connection_adapters/sqlite3_adapter.rb#L13
-  gem "sqlite3", "~> 1.4"
+  # FIXME: sqlite3 v1.5.0+ requires Ruby 2.6.0+
+  gem "sqlite3", "< 1.5.0"
 end
 
 if Gem::Version.create(RUBY_VERSION) < Gem::Version.create("2.5.0")
