@@ -12,75 +12,52 @@ on:
   schedule:
     - cron: "0 10 * * 5" # JST 19:00 (Fri)
 
-env:
-  CI: "true"
-
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    container: ${{ matrix.ruby }}
 
     strategy:
       fail-fast: false
 
       matrix:
         ruby:
-          - ruby:2.2
-          - ruby:2.3
-          - ruby:2.4
-          - ruby:2.5
-          - ruby:2.6
-          - ruby:2.7
-          - ruby:3.0
-          - ruby:3.1
-          - rubylang/ruby:master-nightly-bionic
-        include:
-          - ruby: rubylang/ruby:master-nightly-bionic
-            allow_failures: "true"
+          - "2.2"
+          - "2.3"
+          - "2.4"
+          - "2.5"
+          - "2.6"
+          - "2.7"
+          - "3.0"
+          - "3.1"
 
     steps:
       - uses: actions/checkout@v3
 
       - run: apt-get update && apt-get install -y libsqlite3-dev
 
-      - name: Cache vendor/bundle
-        uses: actions/cache@v1
-        id: cache_gem
+      - uses: ruby/setup-ruby@v1
         with:
-          path: vendor/bundle
-          key: v1-gem-${{ runner.os }}-${{ matrix.ruby }}-${{ github.sha }}
-          restore-keys: |
-            v1-gem-${{ runner.os }}-${{ matrix.ruby }}-
-        continue-on-error: ${{ matrix.allow_failures == 'true' }}
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
 
-      - name: bundle update
-        run: |
-          set -xe
-          bundle config path vendor/bundle
-          bundle update --jobs $(nproc) --retry 3
-        continue-on-error: ${{ matrix.allow_failures == 'true' }}
+      - run: bundle update --jobs $(nproc) --retry 3
 
       - name: Setup Code Climate Test Reporter
         uses: aktions/codeclimate-test-reporter@v1
         with:
           codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
           command: before-build
-        if: matrix.ruby >= 'ruby:2.4'
+        if: matrix.ruby >= '2.4'
         continue-on-error: true
 
-      - name: Run test
-        run: |
-          set -xe
-          bundle exec rspec
-        continue-on-error: ${{ matrix.allow_failures == 'true' }}
+      - run: bundle exec rspec
 
       - name: Teardown Code Climate Test Reporter
         uses: aktions/codeclimate-test-reporter@v1
         with:
           codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
           command: after-build
-        if: matrix.ruby >= 'ruby:2.4' && always()
+        if: matrix.ruby >= '2.4' && always()
         continue-on-error: true
 
       - name: Slack Notification (not success)
