@@ -45,7 +45,6 @@ jobs:
         with:
           codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
           command: before-build
-        if: matrix.ruby >= '2.4'
         continue-on-error: true
 
       - run: bundle exec rspec
@@ -55,7 +54,7 @@ jobs:
         with:
           codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
           command: after-build
-        if: matrix.ruby >= '2.4' && always()
+        if: always()
         continue-on-error: true
 
       - name: Slack Notification (not success)
