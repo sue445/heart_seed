@@ -95,7 +95,7 @@ module HeartSeed
         target_table_names.each do |table_name|
           file_path = File.join(seed_dir, "#{table_name}.yml")
 
-          unless File.exists?(file_path)
+          unless File.exist?(file_path)
             ActiveRecord::Migration.say("[WARN] #{file_path} is not exists")
             next
           end
