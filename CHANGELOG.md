@@ -1,5 +1,11 @@
 ## master
-[full changelog](https://github.com/sue445/heart_seed/compare/v0.2.1...master)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.2.2...master)
+
+## 0.2.2 (2022/12/29)
+[full changelog](https://github.com/sue445/heart_seed/compare/v0.2.1...v0.2.2)
+
+* Support Ruby 3.2
+  * https://github.com/sue445/heart_seed/pull/67
 
 ## 0.2.1 (2021/11/20)
 [full changelog](https://github.com/sue445/heart_seed/compare/v0.2.0...v0.2.1)
