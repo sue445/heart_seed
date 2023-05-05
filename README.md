@@ -1,3 +1,4 @@
+# NO LONGER MAINTAINED
 # HeartSeed
 
 seed util (convert excel to yaml and insert yaml to db)
